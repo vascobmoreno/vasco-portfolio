@@ -6,6 +6,7 @@ import BodyModel, { type Zone } from './BodyModel';
 
 interface Props {
   activeZone:     Zone | null;
+  showHint:       boolean;
   onZoneClick:    (z: Zone) => void;
   onZoneHover:    (z: Zone | null) => void;
   onMissedClick:  () => void;
@@ -110,7 +111,7 @@ function ZoneProjector({ zone, onUpdate }: {
   return null;
 }
 
-export default function HumanScene({ activeZone, onZoneClick, onZoneHover, onMissedClick, onAnchorUpdate }: Props) {
+export default function HumanScene({ activeZone, showHint, onZoneClick, onZoneHover, onMissedClick, onAnchorUpdate }: Props) {
   const [hoveredZone, setHoveredZone] = useState<Zone | null>(null);
 
   const handleZoneHover = (z: Zone | null) => { setHoveredZone(z); onZoneHover(z); };
@@ -137,8 +138,8 @@ export default function HumanScene({ activeZone, onZoneClick, onZoneHover, onMis
         <ZoneLabels activeZone={activeZone} hoveredZone={hoveredZone} onZoneClick={onZoneClick} />
         <ZoneProjector zone={activeZone} onUpdate={onAnchorUpdate} />
 
-        {/* Arrow key hint anchored below model feet */}
-        <Html position={[0, -1.18, 0]} center>
+        {/* Arrow key hint anchored below model feet — desktop only */}
+        {showHint && <Html position={[0, -1.18, 0]} center>
           <div style={{
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
             pointerEvents: 'none', userSelect: 'none',
@@ -164,7 +165,7 @@ export default function HumanScene({ activeZone, onZoneClick, onZoneHover, onMis
               color: 'rgba(0,255,204,0.2)',
             }}>rotate</span>
           </div>
-        </Html>
+        </Html>}
       </Suspense>
 
       <OrbitControls

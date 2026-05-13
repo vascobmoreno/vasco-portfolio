@@ -76,7 +76,9 @@ function ConnectingLine({ anchor, sectionW, sectionH }: {
   );
 }
 
-export default function InteractiveBody() {
+interface InteractiveBodyProps { showHint?: boolean; }
+
+export default function InteractiveBody({ showHint = true }: InteractiveBodyProps) {
   const [activeZone, setActiveZone] = useState<Zone | null>(null);
   const [anchor, setAnchor]         = useState<Anchor | null>(null);
   const sectionRef                  = useRef<HTMLElement>(null);
@@ -91,6 +93,7 @@ export default function InteractiveBody() {
       <div className="absolute inset-0">
         <HumanScene
           activeZone={activeZone}
+          showHint={showHint}
           onZoneClick={(z) => setActiveZone(prev => prev === z ? null : z)}
           onZoneHover={() => {}}
           onMissedClick={() => setActiveZone(null)}
