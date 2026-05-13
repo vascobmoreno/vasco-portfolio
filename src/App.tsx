@@ -96,7 +96,7 @@ export default function App() {
           <>
             {/* Model — always mounted so it loads in background */}
             <div className="absolute inset-0">
-              <InteractiveBody showHint={false} />
+              <InteractiveBody showHint={false} showLabels={false} />
             </div>
 
             {/* Intro overlay */}
@@ -159,11 +159,15 @@ export default function App() {
                       Tap to explore
                     </span>
                     <motion.span
-                      animate={{ y: [0, 5, 0] }}
+                      animate={{ scale: [1, 1.22, 1] }}
                       transition={{ repeat: Infinity, duration: 1.4, ease: 'easeInOut' }}
-                      className="text-[#00ffcc]/40 text-lg group-hover:text-[#00ffcc] transition-colors"
+                      className="text-[#00ffcc]/40 group-hover:text-[#00ffcc] transition-colors"
                     >
-                      ↓
+                      <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" stroke="currentColor" strokeWidth="1.5">
+                        <circle cx="12" cy="12" r="3" />
+                        <circle cx="12" cy="12" r="6.5" strokeOpacity="0.5" />
+                        <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                      </svg>
                     </motion.span>
                   </motion.button>
                 </motion.div>

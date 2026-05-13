@@ -7,6 +7,7 @@ import BodyModel, { type Zone } from './BodyModel';
 interface Props {
   activeZone:     Zone | null;
   showHint:       boolean;
+  showLabels?:    boolean;
   onZoneClick:    (z: Zone) => void;
   onZoneHover:    (z: Zone | null) => void;
   onMissedClick:  () => void;
@@ -111,7 +112,7 @@ function ZoneProjector({ zone, onUpdate }: {
   return null;
 }
 
-export default function HumanScene({ activeZone, showHint, onZoneClick, onZoneHover, onMissedClick, onAnchorUpdate }: Props) {
+export default function HumanScene({ activeZone, showHint, showLabels = true, onZoneClick, onZoneHover, onMissedClick, onAnchorUpdate }: Props) {
   const [hoveredZone, setHoveredZone] = useState<Zone | null>(null);
 
   const handleZoneHover = (z: Zone | null) => { setHoveredZone(z); onZoneHover(z); };
@@ -135,7 +136,7 @@ export default function HumanScene({ activeZone, showHint, onZoneClick, onZoneHo
           onZoneClick={onZoneClick}
           onZoneHover={handleZoneHover}
         />
-        <ZoneLabels activeZone={activeZone} hoveredZone={hoveredZone} onZoneClick={onZoneClick} />
+        {showLabels && <ZoneLabels activeZone={activeZone} hoveredZone={hoveredZone} onZoneClick={onZoneClick} />}
         <ZoneProjector zone={activeZone} onUpdate={onAnchorUpdate} />
 
         {/* Arrow key hint anchored below model feet — desktop only */}
