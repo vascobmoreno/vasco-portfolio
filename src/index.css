@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-dark text-white font-sans antialiased;
+    margin: 0;
+    overflow-x: hidden;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-dark;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/40 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/70;
+  }
+}
+
+/* ── Holographic panel effects ───────────────────────────────────── */
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+@keyframes flicker {
+  0%, 97%, 100% { opacity: 1; }
+  98%           { opacity: 0.6; }
+  99%           { opacity: 0.9; }
+}
+@keyframes glitch-h {
+  0%, 90%, 100% { clip-path: none; transform: none; }
+  92% { clip-path: inset(20% 0 70% 0); transform: translate(-4px, 0); }
+  94% { clip-path: inset(55% 0 25% 0); transform: translate(4px, 0); }
+  96% { clip-path: none; transform: none; }
+}
+.holo-panel {
+  background: rgba(0, 7, 12, 0.94);
+  border: 1px solid rgba(0, 255, 204, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(0, 255, 204, 0.08),
+    inset 0 0 40px rgba(0, 255, 204, 0.04),
+    0 0 50px rgba(0, 255, 204, 0.18),
+    0 20px 60px rgba(0, 0, 0, 0.6);
+  animation: flicker 6s infinite;
+  overflow: hidden;
+}
+.holo-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 255, 204, 0.018) 3px,
+    rgba(0, 255, 204, 0.018) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+.holo-scan::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom,
+    transparent,
+    rgba(0, 255, 204, 0.06),
+    transparent
+  );
+  animation: scanline 3s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+.holo-title {
+  animation: glitch-h 8s infinite;
+}
+
+@layer utilities {
+  .glow {
+    text-shadow: 0 0 20px rgba(0, 255, 204, 0.5), 0 0 40px rgba(0, 255, 204, 0.2);
+  }
+  .glow-border {
+    box-shadow: 0 0 0 1px rgba(0, 255, 204, 0.3), 0 0 20px rgba(0, 255, 204, 0.05);
+  }
+  .glass {
+    background: rgba(22, 22, 31, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
