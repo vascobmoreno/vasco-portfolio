@@ -139,7 +139,6 @@ function PanelContent({ zone }: { zone: Zone }) {
         <Bullet text="IRM (Integrated Risk Management) module integration" delay={0.2} />
         <Bullet text="VR (Vulnerability Response) module development" delay={0.27} />
         <Bullet text="SecOps AI integration on ServiceNow" delay={0.34} />
-        <Bullet text="Cross-functional enterprise solutions delivery" delay={0.41} />
       </div>
       <Divider />
       <div className="flex flex-wrap gap-1.5">
