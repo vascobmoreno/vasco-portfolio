@@ -4,7 +4,7 @@ Personal portfolio website for Vasco Moreno, Software Engineer based in Fafe, Br
 
 ## About
 
-- **Role:** Software Engineer / Tech Analyst at Deloitte Portugal
+- **Role:** Software Engineer
 - **Education:** BSc Software Engineering, Universidade do Minho
 - **Languages:** Portuguese (native), English (fluent), Spanish (conversational)
 - **Contact:** vascobmoreno@gmail.com
