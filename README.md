@@ -7,8 +7,9 @@ Personal portfolio website for Vasco Moreno, Software Engineer based in Fafe, Br
 - **Role:** Software Engineer
 - **Education:** BSc Software Engineering, Universidade do Minho
 - **Languages:** Portuguese (native), English (fluent), Spanish (conversational)
+- **Website:** [vascomoreno.dev](https://vascomoreno.dev/)
 - **Contact:** vascobmoreno@gmail.com
-- **LinkedIn:** [vasco-moreno-13a6aa261](https://www.linkedin.com/in/vasco-moreno-13a6aa261/)
+- **LinkedIn:** [Vasco Moreno](https://www.linkedin.com/in/vasco-moreno-13a6aa261/)
 
 ## Tech Stack
 
