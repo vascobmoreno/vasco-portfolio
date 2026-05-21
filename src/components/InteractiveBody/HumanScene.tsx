@@ -93,8 +93,8 @@ function ZoneLabels({ activeZone, hoveredZone, onZoneClick }: {
 const ZONE_PULSE_DATA: { zone: Zone; pos: [number, number, number]; delay: number }[] = [
   { zone: 'skills',     pos: [ 0,     0.80, 0.12], delay: 0    },
   { zone: 'about',      pos: [ 0,     0.35, 0.12], delay: 0.55 },
-  { zone: 'experience', pos: [-0.18, -0.55, 0.10], delay: 1.1  },
-  { zone: 'education',  pos: [ 0.18, -0.55, 0.10], delay: 1.65 },
+  { zone: 'experience', pos: [-0.10, -0.55, 0.10], delay: 1.1  },
+  { zone: 'education',  pos: [ 0.10, -0.55, 0.10], delay: 1.65 },
 ];
 
 function ZonePulseHints({ activeZone, hoveredZone }: { activeZone: Zone | null; hoveredZone: Zone | null }) {
