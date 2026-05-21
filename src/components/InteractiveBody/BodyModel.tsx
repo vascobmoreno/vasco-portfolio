@@ -239,7 +239,7 @@ export default function BodyModel({ activeZone, onZoneClick, onZoneHover }: Prop
 
   useFrame((state, delta) => {
     if (!modelRef.current) return;
-    sharedTime.current.value = state.clock.elapsedTime;
+    if (!activeZoneRef.current) sharedTime.current.value = state.clock.elapsedTime;
     const breath = 1 + Math.sin(state.clock.elapsedTime * 1.2) * 0.005;
     modelRef.current.scale.setScalar(breath * scale);
     if (!activeZoneRef.current) {

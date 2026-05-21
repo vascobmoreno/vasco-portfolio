@@ -120,7 +120,9 @@ export default function HumanScene({ activeZone, showHint, showLabels = true, on
   return (
     <Canvas
       camera={{ position: [0.5, 0, 3.5], fov: 46 }}
-      gl={{ alpha: true, antialias: true }}
+      gl={{ alpha: true, antialias: true, powerPreference: 'low-power' }}
+      dpr={[1, 1.5]}
+      performance={{ min: 0.5 }}
       style={{ background: 'transparent' }}
       onPointerMissed={onMissedClick}
     >

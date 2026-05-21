@@ -23,6 +23,24 @@ function LinkedInButton() {
   );
 }
 
+function ContactButton() {
+  return (
+    <motion.a
+      href="mailto:vascobmoreno@gmail.com"
+      initial={{ opacity: 0, x: -24 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 1.05 }}
+      className="pointer-events-auto mt-2 inline-flex items-center gap-2.5 border border-[#00ffcc]/20 px-3 py-2 rounded-sm hover:border-[#00ffcc]/45 hover:bg-[#00ffcc]/5 transition-all group"
+    >
+      <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5 text-[#00ffcc]/50 group-hover:text-[#00ffcc]/80 transition-colors" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="M2 7l10 7 10-7" />
+      </svg>
+      <span className="text-[10px] font-mono tracking-[0.2em] text-[#00ffcc]/50 group-hover:text-[#00ffcc]/80 transition-colors uppercase">Contact me</span>
+    </motion.a>
+  );
+}
+
 export default function App() {
   const [isMobile, setIsMobile]       = useState(false);
   const [modelRevealed, setRevealed]  = useState(false);
@@ -87,6 +105,7 @@ export default function App() {
               </motion.div>
 
               <LinkedInButton />
+              <ContactButton />
             </div>
           </>
         )}
