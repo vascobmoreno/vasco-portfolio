@@ -104,8 +104,10 @@ export default function App() {
                 />
               </motion.div>
 
-              <LinkedInButton />
-              <ContactButton />
+              <div className="flex flex-col items-start">
+                <LinkedInButton />
+                <ContactButton />
+              </div>
             </div>
           </>
         )}
@@ -166,6 +168,7 @@ export default function App() {
                   </motion.div>
 
                   <LinkedInButton />
+                  <ContactButton />
 
                   <motion.button
                     initial={{ opacity: 0, y: 16 }}
