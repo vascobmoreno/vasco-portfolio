@@ -90,6 +90,45 @@ function ZoneLabels({ activeZone, hoveredZone, onZoneClick }: {
   );
 }
 
+const ZONE_PULSE_DATA: { zone: Zone; pos: [number, number, number]; delay: number }[] = [
+  { zone: 'skills',     pos: [ 0,     0.80, 0.12], delay: 0    },
+  { zone: 'about',      pos: [ 0,     0.35, 0.12], delay: 0.55 },
+  { zone: 'experience', pos: [-0.18, -0.55, 0.10], delay: 1.1  },
+  { zone: 'education',  pos: [ 0.18, -0.55, 0.10], delay: 1.65 },
+];
+
+function ZonePulseHints({ activeZone, hoveredZone }: { activeZone: Zone | null; hoveredZone: Zone | null }) {
+  const idle = activeZone === null && hoveredZone === null;
+  return (
+    <>
+      {ZONE_PULSE_DATA.map(({ zone, pos, delay }) => (
+        <Html key={zone} position={pos} center>
+          <div style={{
+            position: 'relative', width: 0, height: 0,
+            opacity: idle ? 1 : 0,
+            transition: 'opacity 0.3s',
+            pointerEvents: 'none',
+          }}>
+            {/* solid centre dot */}
+            <div style={{
+              position: 'absolute',
+              width: '6px', height: '6px',
+              borderRadius: '50%',
+              background: '#00ffcc',
+              transform: 'translate(-50%, -50%)',
+              boxShadow: '0 0 8px #00ffcc99',
+            }} />
+            {/* first ring */}
+            <div className="zone-ring" style={{ animationDelay: `${delay}s` }} />
+            {/* second ring, offset by half period */}
+            <div className="zone-ring zone-ring-2" style={{ animationDelay: `${delay + 1.1}s` }} />
+          </div>
+        </Html>
+      ))}
+    </>
+  );
+}
+
 function ZoneProjector({ zone, onUpdate }: {
   zone: Zone | null;
   onUpdate: (pos: { x: number; y: number } | null) => void;
@@ -139,6 +178,7 @@ export default function HumanScene({ activeZone, showHint, showLabels = true, on
           onZoneHover={handleZoneHover}
         />
         {showLabels && <ZoneLabels activeZone={activeZone} hoveredZone={hoveredZone} onZoneClick={onZoneClick} />}
+        <ZonePulseHints activeZone={activeZone} hoveredZone={hoveredZone} />
         <ZoneProjector zone={activeZone} onUpdate={onAnchorUpdate} />
 
         {/* Arrow key hint anchored below model feet — desktop only */}
