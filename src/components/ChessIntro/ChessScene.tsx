@@ -40,7 +40,7 @@ void main() {
   float pulse = sin(uTime * 2.6) * 0.4 + 0.6;
   col = mix(col, vec3(0.0, 1.0, 0.80), goal * pulse * 0.55);
 
-  gl_FragColor = vec4(col, 1.0);
+  gl_FragColor = vec4(col, 0.38);
 }`;
 
 /* ── Board ──────────────────────────────────────────────────────────── */
@@ -60,22 +60,8 @@ function Board({ onBoardClick }: { onBoardClick: (pt: THREE.Vector3) => void }) 
         vertexShader={BOARD_VERT}
         fragmentShader={BOARD_FRAG}
         uniforms={uniforms}
+        transparent
       />
-    </mesh>
-  );
-}
-
-/* ── Goal ring ──────────────────────────────────────────────────────── */
-function GoalRing() {
-  const ref = useRef<THREE.Mesh>(null!);
-  useFrame(s => {
-    ref.current.rotation.y = s.clock.elapsedTime * 0.6;
-    ref.current.position.y = 0.55 + Math.sin(s.clock.elapsedTime * 1.4) * 0.08;
-  });
-  return (
-    <mesh ref={ref} position={[0.5, 0.55, 3.5]}>
-      <torusGeometry args={[0.38, 0.025, 8, 48]} />
-      <meshStandardMaterial color="#00ffcc" emissive="#00ffcc" emissiveIntensity={1.2} />
     </mesh>
   );
 }
@@ -120,36 +106,7 @@ function EnemyKing() {
       }>
         <KingMesh color="#3a0a00" emissive="#ff2200" emissiveIntensity={0.35} />
       </Suspense>
-      {/* shadow circle */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
-        <circleGeometry args={[0.35, 32]} />
-        <meshBasicMaterial color="#ff2200" transparent opacity={0.15} />
-      </mesh>
     </group>
-  );
-}
-
-/* ── Target indicator ───────────────────────────────────────────────── */
-function TargetIndicator({ targetRef }: { targetRef: React.MutableRefObject<THREE.Vector3 | null> }) {
-  const ref = useRef<THREE.Mesh>(null!);
-  useFrame(s => {
-    if (!ref.current) return;
-    const t = targetRef.current;
-    if (t) {
-      ref.current.visible = true;
-      ref.current.position.set(t.x, 0.02, t.z);
-      ref.current.rotation.y = s.clock.elapsedTime * 1.5;
-      const pulse = 0.7 + Math.sin(s.clock.elapsedTime * 4) * 0.3;
-      ref.current.scale.setScalar(pulse);
-    } else {
-      ref.current.visible = false;
-    }
-  });
-  return (
-    <mesh ref={ref} rotation={[-Math.PI / 2, 0, 0]} visible={false}>
-      <ringGeometry args={[0.28, 0.38, 16]} />
-      <meshBasicMaterial color="#00ffcc" transparent opacity={0.6} />
-    </mesh>
   );
 }
 
@@ -184,16 +141,16 @@ function KingController({ targetRef, onWin }: { targetRef: React.MutableRefObjec
 
     groupRef.current.position.lerp(posRef.current, 0.15);
 
-    if (posRef.current.distanceTo(ENEMY_POS) < 1.5 && !wonRef.current) {
+    if (posRef.current.distanceTo(ENEMY_POS) < 0.5 && !wonRef.current) {
       wonRef.current = true;
       onWin();
     }
 
-    // 3rd-person camera — closer, more immersive
+    // 3rd-person camera — low and close behind
     const kp  = groupRef.current.position;
-    const cam = new THREE.Vector3(kp.x * 0.5, 1.6, kp.z - 2.2);
+    const cam = new THREE.Vector3(kp.x * 0.5, 0.75, kp.z - 3.2);
     state.camera.position.lerp(cam, 0.07);
-    state.camera.lookAt(kp.x * 0.6, 0.6, kp.z + 1.5);
+    state.camera.lookAt(kp.x * 0.6, 0.4, kp.z + 2.5);
   });
 
   return (
@@ -221,7 +178,7 @@ export default function ChessScene({ onWin }: { onWin: () => void }) {
 
   return (
     <Canvas
-      camera={{ position: [0.25, 1.6, -5.7], fov: 70 }}
+      camera={{ position: [0.25, 0.75, -6.5], fov: 70 }}
       gl={{ antialias: true, powerPreference: 'low-power' }}
       dpr={[1, 1.5]}
       shadows
@@ -235,8 +192,6 @@ export default function ChessScene({ onWin }: { onWin: () => void }) {
       <pointLight position={[ 0, 2, -5]} intensity={0.30} color="#004433" />
       <pointLight position={[ 0.5, 2, 3.5]} intensity={0.8} color="#ff2200" />
       <Board onBoardClick={pt => { targetRef.current = pt; }} />
-      <GoalRing />
-      <TargetIndicator targetRef={targetRef} />
       <EnemyKing />
       <KingController targetRef={targetRef} onWin={onWin} />
     </Canvas>
