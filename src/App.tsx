@@ -164,7 +164,7 @@ export default function App() {
                 className="text-5xl font-bold text-white mb-3 tracking-tight leading-tight"
               >
                 Vasco{' '}
-                <span className="text-primary glow">Moreno</span>
+                <span className="text-primary glow glitch-text" data-text="Moreno">Moreno</span>
               </motion.h1>
 
               <motion.div
@@ -228,7 +228,7 @@ export default function App() {
                     className="text-5xl font-bold text-white mb-3 tracking-tight leading-tight"
                   >
                     Vasco{' '}
-                    <span className="text-primary glow">Moreno</span>
+                    <span className="text-primary glow glitch-text" data-text="Moreno">Moreno</span>
                   </motion.h1>
 
                   <motion.div
