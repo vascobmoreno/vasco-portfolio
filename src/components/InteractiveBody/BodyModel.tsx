@@ -28,8 +28,17 @@ const ZONE_PULSE_DATA: { zone: Zone; pos: [number,number,number]; delay: number 
   { zone: 'education',  pos: [ 0.10, -0.55, 0.10], delay: 1.65 },
 ];
 
-function ZoneLabels({ activeZone, hoveredZone, onZoneClick }: {
+function toLocal(
+  pos: [number, number, number],
+  scale: number,
+  center: THREE.Vector3,
+): [number, number, number] {
+  return [pos[0] / scale - center.x, pos[1] / scale - center.y, pos[2] / scale - center.z];
+}
+
+function ZoneLabels({ activeZone, hoveredZone, onZoneClick, scale, center }: {
   activeZone: Zone | null; hoveredZone: Zone | null; onZoneClick: (z: Zone) => void;
+  scale: number; center: THREE.Vector3;
 }) {
   return (
     <>
@@ -38,7 +47,7 @@ function ZoneLabels({ activeZone, hoveredZone, onZoneClick }: {
         const isHovered = hoveredZone === zone;
         const visible   = isActive || isHovered;
         return (
-          <Html key={zone} position={pos} center>
+          <Html key={zone} position={toLocal(pos, scale, center)} center>
             <div onClick={() => onZoneClick(zone)} style={{
               display: 'flex', alignItems: 'center', gap: '5px',
               flexDirection: align === 'left' ? 'row' : 'row-reverse',
@@ -71,12 +80,14 @@ function ZoneLabels({ activeZone, hoveredZone, onZoneClick }: {
   );
 }
 
-function ZonePulseHints({ activeZone, hoveredZone }: { activeZone: Zone | null; hoveredZone: Zone | null }) {
+function ZonePulseHints({ activeZone, hoveredZone, scale, center }: {
+  activeZone: Zone | null; hoveredZone: Zone | null; scale: number; center: THREE.Vector3;
+}) {
   const idle = activeZone === null && hoveredZone === null;
   return (
     <>
       {ZONE_PULSE_DATA.map(({ zone, pos, delay }) => (
-        <Html key={zone} position={pos} center>
+        <Html key={zone} position={toLocal(pos, scale, center)} center>
           <div style={{
             position: 'relative', width: 0, height: 0,
             opacity: idle ? 1 : 0, transition: 'opacity 0.3s', pointerEvents: 'none',
@@ -368,13 +379,9 @@ export default function BodyModel({ activeZone, onZoneClick, onZoneHover, showLa
         if (bz) onZoneClick(BODY_TO_ZONE[bz]);
       }}
     >
-      {/* Counter-scale so Html positions stay in world space but rotate with the model */}
-      <group scale={[1 / scale, 1 / scale, 1 / scale]}>
-        <ZonePulseHints activeZone={activeZone} hoveredZone={hoveredZone} />
-        {showLabels && <ZoneLabels activeZone={activeZone} hoveredZone={hoveredZone} onZoneClick={onZoneClick} />}
-      </group>
-
       <group position={[center.x, center.y, center.z]}>
+        <ZonePulseHints activeZone={activeZone} hoveredZone={hoveredZone} scale={scale} center={center} />
+        {showLabels && <ZoneLabels activeZone={activeZone} hoveredZone={hoveredZone} onZoneClick={onZoneClick} scale={scale} center={center} />}
         <primitive object={outlineScene} />
         <primitive object={solidScene} />
         <primitive object={wireScene} />
