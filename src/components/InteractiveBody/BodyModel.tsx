@@ -1,6 +1,6 @@
 import { useRef, useState, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useGLTF, Html } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
 export type Zone = 'skills' | 'about' | 'experience' | 'education' | 'contact';
@@ -10,100 +10,6 @@ interface Props {
   activeZone:  Zone | null;
   onZoneClick: (z: Zone) => void;
   onZoneHover: (z: Zone | null) => void;
-  showLabels?: boolean;
-}
-
-/* ── Zone label + pulse data (co-located so positions rotate with model) ── */
-const ZONE_LABEL_DATA: { zone: Zone; pos: [number,number,number]; color: string; align: 'left'|'right'; label: string }[] = [
-  { zone: 'skills',     pos: [ 0.52,  0.80, 0], color: '#00ffcc', align: 'left',  label: 'SKILLS'     },
-  { zone: 'about',      pos: [-0.52,  0.36, 0], color: '#00ffcc', align: 'right', label: 'ABOUT ME'   },
-  { zone: 'experience', pos: [-0.52, -0.55, 0], color: '#00ffcc', align: 'right', label: 'EXPERIENCE' },
-  { zone: 'education',  pos: [ 0.52, -0.55, 0], color: '#00ffcc', align: 'left',  label: 'EDUCATION'  },
-];
-
-const ZONE_PULSE_DATA: { zone: Zone; pos: [number,number,number]; delay: number }[] = [
-  { zone: 'skills',     pos: [ 0,     0.80, 0.12], delay: 0    },
-  { zone: 'about',      pos: [ 0,     0.35, 0.12], delay: 0.55 },
-  { zone: 'experience', pos: [-0.10, -0.55, 0.10], delay: 1.1  },
-  { zone: 'education',  pos: [ 0.10, -0.55, 0.10], delay: 1.65 },
-];
-
-function toLocal(
-  pos: [number, number, number],
-  scale: number,
-  center: THREE.Vector3,
-): [number, number, number] {
-  return [pos[0] / scale - center.x, pos[1] / scale - center.y, pos[2] / scale - center.z];
-}
-
-function ZoneLabels({ activeZone, hoveredZone, onZoneClick, scale, center }: {
-  activeZone: Zone | null; hoveredZone: Zone | null; onZoneClick: (z: Zone) => void;
-  scale: number; center: THREE.Vector3;
-}) {
-  return (
-    <>
-      {ZONE_LABEL_DATA.map(({ zone, pos, color, align, label }) => {
-        const isActive  = activeZone  === zone;
-        const isHovered = hoveredZone === zone;
-        const visible   = isActive || isHovered;
-        return (
-          <Html key={zone} position={toLocal(pos, scale, center)} center>
-            <div onClick={() => onZoneClick(zone)} style={{
-              display: 'flex', alignItems: 'center', gap: '5px',
-              flexDirection: align === 'left' ? 'row' : 'row-reverse',
-              cursor: 'pointer', userSelect: 'none', whiteSpace: 'nowrap',
-              opacity: visible ? 1 : 0,
-              pointerEvents: visible ? 'auto' : 'none',
-              transition: 'opacity 0.2s',
-            }}>
-              <div style={{
-                width: isHovered ? '22px' : '16px', height: '1px',
-                background: color, boxShadow: `0 0 6px ${color}`,
-                transition: 'width 0.2s',
-              }} />
-              <div style={{
-                fontFamily: 'monospace', fontSize: '9px', letterSpacing: '0.2em',
-                color, padding: '2px 7px',
-                border: `1px solid ${color}${isActive ? 'aa' : '66'}`,
-                borderRadius: '2px', background: 'rgba(0,10,8,0.92)',
-                boxShadow: isActive ? `0 0 12px ${color}55, inset 0 0 8px ${color}22` : `0 0 7px ${color}33`,
-                transform: isHovered && !isActive ? 'scale(1.06)' : 'scale(1)',
-                transition: 'all 0.2s',
-              }}>
-                {label}
-              </div>
-            </div>
-          </Html>
-        );
-      })}
-    </>
-  );
-}
-
-function ZonePulseHints({ activeZone, hoveredZone, scale, center }: {
-  activeZone: Zone | null; hoveredZone: Zone | null; scale: number; center: THREE.Vector3;
-}) {
-  const idle = activeZone === null && hoveredZone === null;
-  return (
-    <>
-      {ZONE_PULSE_DATA.map(({ zone, pos, delay }) => (
-        <Html key={zone} position={toLocal(pos, scale, center)} center>
-          <div style={{
-            position: 'relative', width: 0, height: 0,
-            opacity: idle ? 1 : 0, transition: 'opacity 0.3s', pointerEvents: 'none',
-          }}>
-            <div style={{
-              position: 'absolute', width: '6px', height: '6px', borderRadius: '50%',
-              background: '#00ffcc', transform: 'translate(-50%, -50%)',
-              boxShadow: '0 0 8px #00ffcc99',
-            }} />
-            <div className="zone-ring" style={{ animationDelay: `${delay}s` }} />
-            <div className="zone-ring zone-ring-2" style={{ animationDelay: `${delay + 1.1}s` }} />
-          </div>
-        </Html>
-      ))}
-    </>
-  );
 }
 
 const MODEL = '/model.glb';
@@ -210,7 +116,17 @@ void main() {
   if      (isActive)  { col = litCol;  em = 0.50; alpha = 0.62; }
   else if (isHovered) { col = litCol;  em = 0.38; alpha = 0.58; }
   else if (anyLit)    { col = idleCol; em = 0.06; alpha = 0.18; }
-  else                { col = idleCol; em = 0.15 + wave * 0.28; alpha = 0.40 + wave * 0.18; }
+  else {
+    // Zone boundary glow — highlight the dividing lines between body regions
+    float dH   = abs(ny - 0.68);
+    float dL   = abs(ny + 0.15);
+    float dS   = ny < -0.15 ? abs(nx) * 0.5 : 10.0;
+    float edge = 1.0 - smoothstep(0.0, 0.055, min(dH, min(dL, dS)));
+    float ep   = edge * (sin(uTime * 2.0) * 0.4 + 0.6);
+    col   = mix(idleCol, litCol, wave * 0.28 + ep * 0.65);
+    em    = 0.15 + wave * 0.28 + ep * 0.50;
+    alpha = 0.40 + wave * 0.18 + ep * 0.16;
+  }
 
   if (uWire > 0.5) {
     vec3  wCol   = (isActive || isHovered) ? litCol : idleCol;
@@ -233,7 +149,7 @@ function makeUniforms(halfMax: number, wire: boolean, modelInv: THREE.Matrix4, t
   };
 }
 
-export default function BodyModel({ activeZone, onZoneClick, onZoneHover, showLabels = true }: Props) {
+export default function BodyModel({ activeZone, onZoneClick, onZoneHover }: Props) {
   const { scene } = useGLTF(MODEL);
   const modelRef       = useRef<THREE.Group>(null);
   const modelInvRef    = useRef(new THREE.Matrix4());
@@ -354,8 +270,6 @@ export default function BodyModel({ activeZone, onZoneClick, onZoneHover, showLa
     return classifyBody(local.x / halfMax, local.y / halfMax);
   };
 
-  const hoveredZone: Zone | null = hoveredBodyZone ? BODY_TO_ZONE[hoveredBodyZone] : null;
-
   return (
     <group
       ref={modelRef}
@@ -380,8 +294,6 @@ export default function BodyModel({ activeZone, onZoneClick, onZoneHover, showLa
       }}
     >
       <group position={[center.x, center.y, center.z]}>
-        <ZonePulseHints activeZone={activeZone} hoveredZone={hoveredZone} scale={scale} center={center} />
-        {showLabels && <ZoneLabels activeZone={activeZone} hoveredZone={hoveredZone} onZoneClick={onZoneClick} scale={scale} center={center} />}
         <primitive object={outlineScene} />
         <primitive object={solidScene} />
         <primitive object={wireScene} />

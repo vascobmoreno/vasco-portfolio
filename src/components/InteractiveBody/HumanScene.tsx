@@ -7,7 +7,6 @@ import BodyModel, { type Zone } from './BodyModel';
 interface Props {
   activeZone:     Zone | null;
   showHint:       boolean;
-  showLabels?:    boolean;
   onZoneClick:    (z: Zone) => void;
   onZoneHover:    (z: Zone | null) => void;
   onMissedClick:  () => void;
@@ -46,7 +45,7 @@ function ZoneProjector({ zone, onUpdate }: {
   return null;
 }
 
-export default function HumanScene({ activeZone, showHint, showLabels = true, onZoneClick, onZoneHover, onMissedClick, onAnchorUpdate }: Props) {
+export default function HumanScene({ activeZone, showHint, onZoneClick, onZoneHover, onMissedClick, onAnchorUpdate }: Props) {
   return (
     <Canvas
       camera={{ position: [0.5, 0, 3.5], fov: 46 }}
@@ -67,7 +66,6 @@ export default function HumanScene({ activeZone, showHint, showLabels = true, on
           activeZone={activeZone}
           onZoneClick={onZoneClick}
           onZoneHover={onZoneHover}
-          showLabels={showLabels}
         />
         <ZoneProjector zone={activeZone} onUpdate={onAnchorUpdate} />
 

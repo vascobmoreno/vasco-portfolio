@@ -121,7 +121,7 @@ export default function App() {
           <>
             {/* Model — always mounted so it loads in background */}
             <div className="absolute inset-0">
-              <InteractiveBody showHint={false} showLabels={false} />
+              <InteractiveBody showHint={false} />
             </div>
 
             {/* Intro overlay */}
