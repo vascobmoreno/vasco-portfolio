@@ -1,8 +1,27 @@
-import { useEffect, useState } from 'react';
+import { type ComponentType, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ReactionTest from './games/ReactionTest';
+import SimonSays      from './games/SimonSays';
+import ReactionTest   from './games/ReactionTest';
+import TypePhrase     from './games/TypePhrase';
+import QuickMath      from './games/QuickMath';
+import NumberSequence from './games/NumberSequence';
+import MiniMaze       from './games/MiniMaze';
+import AnagramSolve   from './games/AnagramSolve';
+
+type GameProps = { onSolve: () => void };
+
+const GAMES: { Component: ComponentType<GameProps>; name: string }[] = [
+  { Component: SimonSays,      name: 'Simon Says'      },
+  { Component: ReactionTest,   name: 'Reaction Test'   },
+  { Component: TypePhrase,     name: 'Type to Unlock'  },
+  { Component: QuickMath,      name: 'Quick Math'      },
+  { Component: NumberSequence, name: 'Number Sequence' },
+  { Component: MiniMaze,       name: 'Mini Maze'       },
+  { Component: AnagramSolve,   name: 'Anagram'         },
+];
 
 export default function Intro({ onUnlock }: { onUnlock: () => void }) {
+  const [idx]  = useState(() => Math.floor(Math.random() * GAMES.length));
   const [won, setWon] = useState(false);
 
   useEffect(() => {
@@ -11,8 +30,7 @@ export default function Intro({ onUnlock }: { onUnlock: () => void }) {
     return () => clearTimeout(t);
   }, [won, onUnlock]);
 
-  const name = 'Reaction Test';
-  const Game = ReactionTest;
+  const { Component: Game, name } = GAMES[idx];
 
   return (
     <motion.div

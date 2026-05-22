@@ -4,7 +4,6 @@ type Phase = 'start' | 'wait' | 'now' | 'result';
 
 export default function ReactionTest({ onSolve }: { onSolve: () => void }) {
   const [phase, setPhase] = useState<Phase>('start');
-  const [round, setRound] = useState(0);
   const [ms, setMs] = useState(0);
   const [tooEarly, setTooEarly] = useState(false);
   const t0 = useRef(0);
@@ -24,7 +23,6 @@ export default function ReactionTest({ onSolve }: { onSolve: () => void }) {
 
   function tap() {
     if (phase === 'start') {
-      setRound(1);
       beginRound();
     } else if (phase === 'wait') {
       clearTimeout(timer.current);
@@ -35,12 +33,7 @@ export default function ReactionTest({ onSolve }: { onSolve: () => void }) {
       const elapsed = Date.now() - t0.current;
       setMs(elapsed);
       setPhase('result');
-      if (round >= 3) {
-        setTimeout(onSolve, 1100);
-      } else {
-        setRound(r => r + 1);
-        setTimeout(beginRound, 1000);
-      }
+      setTimeout(onSolve, 1100);
     }
   }
 
@@ -63,11 +56,6 @@ export default function ReactionTest({ onSolve }: { onSolve: () => void }) {
       {phase === 'result' && (
         <p className="font-mono text-3xl" style={{ color: tooEarly ? '#ff4444' : '#00ffcc' }}>
           {tooEarly ? 'Too early!' : `${ms} ms`}
-        </p>
-      )}
-      {round > 0 && (
-        <p className="font-mono text-[10px] text-[#00ffcc]/25 tracking-widest">
-          Round {Math.min(round, 3)} / 3
         </p>
       )}
     </div>
