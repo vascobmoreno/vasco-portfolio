@@ -47,14 +47,14 @@ export default function App() {
   const [isMobile, setIsMobile]      = useState(false);
   const [modelRevealed, setRevealed] = useState(false);
 
-  if (!unlocked) return <Intro onUnlock={() => setUnlocked(true)} />;
-
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);
+
+  if (!unlocked) return <Intro onUnlock={() => setUnlocked(true)} />;
 
   return (
     <div className="h-screen overflow-hidden bg-dark flex flex-col">

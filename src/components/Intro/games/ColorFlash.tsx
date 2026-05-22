@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const PALETTE = [
   { id: 'teal',   hex: '#00ffcc', bg: '#00ffcc15' },
@@ -12,22 +12,31 @@ const PALETTE = [
 function shuffle<T>(a: T[]) { return [...a].sort(() => Math.random() - 0.5); }
 
 export default function ColorFlash({ onSolve }: { onSolve: () => void }) {
-  const [sequence]  = useState(() => shuffle(PALETTE).slice(0, 4));
-  const [scrambled] = useState(() => { const s = shuffle(sequence); return s; });
-  const [phase, setPhase] = useState<'show' | 'play' | 'wrong'>('show');
+  const [[sequence, scrambled]] = useState<[typeof PALETTE, typeof PALETTE]>(() => {
+    const seq = shuffle(PALETTE).slice(0, 4);
+    return [seq, shuffle(seq)];
+  });
+
+  const [phase, setPhase]   = useState<'show' | 'play' | 'wrong'>('show');
   const [clicks, setClicks] = useState<string[]>([]);
+  const locked = useRef(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setPhase('play'), 2600);
+    const t = setTimeout(() => setPhase('play'), 2800);
     return () => clearTimeout(t);
   }, []);
 
   function pick(id: string) {
-    if (phase === 'wrong') return;
+    if (locked.current || phase !== 'play') return;
     const next = clicks.length;
     if (id !== sequence[next].id) {
+      locked.current = true;
       setPhase('wrong');
-      setTimeout(() => { setClicks([]); setPhase('play'); }, 900);
+      setTimeout(() => {
+        locked.current = false;
+        setClicks([]);
+        setPhase('play');
+      }, 950);
       return;
     }
     const updated = [...clicks, id];
@@ -38,42 +47,42 @@ export default function ColorFlash({ onSolve }: { onSolve: () => void }) {
   return (
     <div className="flex flex-col items-center gap-6">
       <p className="font-mono text-xs text-[#00ffcc]/40 h-5">
-        {phase === 'show'  ? 'Memorize the order...'                           : ''}
-        {phase === 'play'  ? `Click in the same order — ${clicks.length} / 4` : ''}
-        {phase === 'wrong' ? '✗ Wrong order!'                                  : ''}
+        {phase === 'show'  && 'Memorize the order...'}
+        {phase === 'play'  && `Repeat in order — ${clicks.length} / 4`}
+        {phase === 'wrong' && '✗ Wrong — try again'}
       </p>
 
       {phase === 'show' ? (
         <div className="flex gap-4 items-end">
           {sequence.map((c, i) => (
             <div key={c.id} className="flex flex-col items-center gap-2">
-              <span className="font-mono text-[10px] text-white/30">{i + 1}</span>
-              <div className="w-16 h-16 rounded-xl"
-                style={{ background: c.bg, border: `2px solid ${c.hex}`, boxShadow: `0 0 16px ${c.hex}44` }} />
+              <span className="font-mono text-[10px] text-white/40">{i + 1}</span>
+              <div className="w-16 h-16 rounded-xl transition-all"
+                style={{ background: c.bg, border: `2px solid ${c.hex}`, boxShadow: `0 0 18px ${c.hex}55` }} />
             </div>
           ))}
         </div>
       ) : (
         <div className="flex gap-4">
           {scrambled.map(c => {
-            const clicked = clicks.includes(c.id);
+            const done = clicks.includes(c.id);
             return (
-              <button key={c.id} onClick={() => pick(c.id)} disabled={clicked}
-                className="w-16 h-16 rounded-xl border-2 transition-all duration-150 hover:scale-105 disabled:opacity-30"
+              <button
+                key={c.id}
+                onClick={() => pick(c.id)}
+                className="w-16 h-16 rounded-xl border-2 transition-all duration-150 hover:scale-105 active:scale-95"
                 style={{
-                  background:  clicked ? `${c.hex}30` : c.bg,
-                  borderColor: clicked ? c.hex         : `${c.hex}55`,
-                  boxShadow:   clicked ? `0 0 14px ${c.hex}55` : 'none',
-                }} />
+                  background:    done ? `${c.hex}35` : c.bg,
+                  borderColor:   done ? c.hex : `${c.hex}55`,
+                  boxShadow:     done ? `0 0 16px ${c.hex}66` : 'none',
+                  opacity:       phase === 'wrong' ? 0.4 : 1,
+                  pointerEvents: phase === 'wrong' ? 'none' : 'auto',
+                  cursor:        'pointer',
+                }}
+              />
             );
           })}
         </div>
-      )}
-
-      {phase === 'show' && (
-        <p className="font-mono text-[9px] text-[#00ffcc]/20 tracking-widest animate-pulse">
-          Memorizing in {2.6}s...
-        </p>
       )}
     </div>
   );

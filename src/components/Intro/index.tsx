@@ -5,11 +5,9 @@ import ReactionTest   from './games/ReactionTest';
 import TypePhrase     from './games/TypePhrase';
 import QuickMath      from './games/QuickMath';
 import NumberSequence from './games/NumberSequence';
-import BinaryDecode   from './games/BinaryDecode';
 import MiniMaze       from './games/MiniMaze';
 import AnagramSolve   from './games/AnagramSolve';
 import ColorFlash     from './games/ColorFlash';
-import TrueOrFalse    from './games/TrueOrFalse';
 
 type GameProps = { onSolve: () => void };
 
@@ -19,11 +17,9 @@ const GAMES: { Component: ComponentType<GameProps>; name: string }[] = [
   { Component: TypePhrase,     name: 'Type to Unlock'  },
   { Component: QuickMath,      name: 'Quick Math'      },
   { Component: NumberSequence, name: 'Number Sequence' },
-  { Component: BinaryDecode,   name: 'Binary Decode'   },
   { Component: MiniMaze,       name: 'Mini Maze'       },
   { Component: AnagramSolve,   name: 'Anagram'         },
   { Component: ColorFlash,     name: 'Color Flash'     },
-  { Component: TrueOrFalse,    name: 'True or False'   },
 ];
 
 export default function Intro({ onUnlock }: { onUnlock: () => void }) {
