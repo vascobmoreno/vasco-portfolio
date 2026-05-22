@@ -1,6 +1,6 @@
 import { useRef, useState, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
+import { useGLTF, Html } from '@react-three/drei';
 import * as THREE from 'three';
 
 export type Zone = 'skills' | 'about' | 'experience' | 'education' | 'contact';
@@ -10,6 +10,89 @@ interface Props {
   activeZone:  Zone | null;
   onZoneClick: (z: Zone) => void;
   onZoneHover: (z: Zone | null) => void;
+  showLabels?: boolean;
+}
+
+/* ── Zone label + pulse data (co-located so positions rotate with model) ── */
+const ZONE_LABEL_DATA: { zone: Zone; pos: [number,number,number]; color: string; align: 'left'|'right'; label: string }[] = [
+  { zone: 'skills',     pos: [ 0.52,  0.80, 0], color: '#00ffcc', align: 'left',  label: 'SKILLS'     },
+  { zone: 'about',      pos: [-0.52,  0.36, 0], color: '#00ffcc', align: 'right', label: 'ABOUT ME'   },
+  { zone: 'experience', pos: [-0.52, -0.55, 0], color: '#00ffcc', align: 'right', label: 'EXPERIENCE' },
+  { zone: 'education',  pos: [ 0.52, -0.55, 0], color: '#00ffcc', align: 'left',  label: 'EDUCATION'  },
+];
+
+const ZONE_PULSE_DATA: { zone: Zone; pos: [number,number,number]; delay: number }[] = [
+  { zone: 'skills',     pos: [ 0,     0.80, 0.12], delay: 0    },
+  { zone: 'about',      pos: [ 0,     0.35, 0.12], delay: 0.55 },
+  { zone: 'experience', pos: [-0.10, -0.55, 0.10], delay: 1.1  },
+  { zone: 'education',  pos: [ 0.10, -0.55, 0.10], delay: 1.65 },
+];
+
+function ZoneLabels({ activeZone, hoveredZone, onZoneClick }: {
+  activeZone: Zone | null; hoveredZone: Zone | null; onZoneClick: (z: Zone) => void;
+}) {
+  return (
+    <>
+      {ZONE_LABEL_DATA.map(({ zone, pos, color, align, label }) => {
+        const isActive  = activeZone  === zone;
+        const isHovered = hoveredZone === zone;
+        const visible   = isActive || isHovered;
+        return (
+          <Html key={zone} position={pos} center>
+            <div onClick={() => onZoneClick(zone)} style={{
+              display: 'flex', alignItems: 'center', gap: '5px',
+              flexDirection: align === 'left' ? 'row' : 'row-reverse',
+              cursor: 'pointer', userSelect: 'none', whiteSpace: 'nowrap',
+              opacity: visible ? 1 : 0,
+              pointerEvents: visible ? 'auto' : 'none',
+              transition: 'opacity 0.2s',
+            }}>
+              <div style={{
+                width: isHovered ? '22px' : '16px', height: '1px',
+                background: color, boxShadow: `0 0 6px ${color}`,
+                transition: 'width 0.2s',
+              }} />
+              <div style={{
+                fontFamily: 'monospace', fontSize: '9px', letterSpacing: '0.2em',
+                color, padding: '2px 7px',
+                border: `1px solid ${color}${isActive ? 'aa' : '66'}`,
+                borderRadius: '2px', background: 'rgba(0,10,8,0.92)',
+                boxShadow: isActive ? `0 0 12px ${color}55, inset 0 0 8px ${color}22` : `0 0 7px ${color}33`,
+                transform: isHovered && !isActive ? 'scale(1.06)' : 'scale(1)',
+                transition: 'all 0.2s',
+              }}>
+                {label}
+              </div>
+            </div>
+          </Html>
+        );
+      })}
+    </>
+  );
+}
+
+function ZonePulseHints({ activeZone, hoveredZone }: { activeZone: Zone | null; hoveredZone: Zone | null }) {
+  const idle = activeZone === null && hoveredZone === null;
+  return (
+    <>
+      {ZONE_PULSE_DATA.map(({ zone, pos, delay }) => (
+        <Html key={zone} position={pos} center>
+          <div style={{
+            position: 'relative', width: 0, height: 0,
+            opacity: idle ? 1 : 0, transition: 'opacity 0.3s', pointerEvents: 'none',
+          }}>
+            <div style={{
+              position: 'absolute', width: '6px', height: '6px', borderRadius: '50%',
+              background: '#00ffcc', transform: 'translate(-50%, -50%)',
+              boxShadow: '0 0 8px #00ffcc99',
+            }} />
+            <div className="zone-ring" style={{ animationDelay: `${delay}s` }} />
+            <div className="zone-ring zone-ring-2" style={{ animationDelay: `${delay + 1.1}s` }} />
+          </div>
+        </Html>
+      ))}
+    </>
+  );
 }
 
 const MODEL = '/model.glb';
@@ -139,7 +222,7 @@ function makeUniforms(halfMax: number, wire: boolean, modelInv: THREE.Matrix4, t
   };
 }
 
-export default function BodyModel({ activeZone, onZoneClick, onZoneHover }: Props) {
+export default function BodyModel({ activeZone, onZoneClick, onZoneHover, showLabels = true }: Props) {
   const { scene } = useGLTF(MODEL);
   const modelRef       = useRef<THREE.Group>(null);
   const modelInvRef    = useRef(new THREE.Matrix4());
@@ -260,6 +343,8 @@ export default function BodyModel({ activeZone, onZoneClick, onZoneHover }: Prop
     return classifyBody(local.x / halfMax, local.y / halfMax);
   };
 
+  const hoveredZone: Zone | null = hoveredBodyZone ? BODY_TO_ZONE[hoveredBodyZone] : null;
+
   return (
     <group
       ref={modelRef}
@@ -283,6 +368,12 @@ export default function BodyModel({ activeZone, onZoneClick, onZoneHover }: Prop
         if (bz) onZoneClick(BODY_TO_ZONE[bz]);
       }}
     >
+      {/* Counter-scale so Html positions stay in world space but rotate with the model */}
+      <group scale={[1 / scale, 1 / scale, 1 / scale]}>
+        <ZonePulseHints activeZone={activeZone} hoveredZone={hoveredZone} />
+        {showLabels && <ZoneLabels activeZone={activeZone} hoveredZone={hoveredZone} onZoneClick={onZoneClick} />}
+      </group>
+
       <group position={[center.x, center.y, center.z]}>
         <primitive object={outlineScene} />
         <primitive object={solidScene} />

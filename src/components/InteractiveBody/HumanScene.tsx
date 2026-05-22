@@ -1,6 +1,6 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Html } from '@react-three/drei';
-import { Suspense, useRef, useState } from 'react';
+import { OrbitControls } from '@react-three/drei';
+import { Suspense, useRef } from 'react';
 import * as THREE from 'three';
 import BodyModel, { type Zone } from './BodyModel';
 
@@ -23,111 +23,6 @@ const ZONE_ANCHORS: Record<Zone, [number, number, number]> = {
   contact:    [ 0,    -0.60,  0.00],  // (unused body zone, kept for safety)
 };
 
-const ZONE_LABEL_DATA: { zone: Zone; pos: [number, number, number]; color: string; align: 'left' | 'right'; label: string }[] = [
-  { zone: 'skills',     pos: [ 0.52,  0.80, 0], color: '#00ffcc', align: 'left',  label: 'SKILLS'     },
-  { zone: 'about',      pos: [-0.52,  0.36, 0], color: '#00ffcc', align: 'right', label: 'ABOUT ME'   },
-  { zone: 'experience', pos: [-0.52, -0.55, 0], color: '#00ffcc', align: 'right', label: 'EXPERIENCE' },
-  { zone: 'education',  pos: [ 0.52, -0.55, 0], color: '#00ffcc', align: 'left',  label: 'EDUCATION'  },
-];
-
-function ZoneLabels({ activeZone, hoveredZone, onZoneClick }: {
-  activeZone: Zone | null;
-  hoveredZone: Zone | null;
-  onZoneClick: (z: Zone) => void;
-}) {
-  return (
-    <>
-      {ZONE_LABEL_DATA.map(({ zone, pos, color, align, label }) => {
-        const isActive  = activeZone  === zone;
-        const isHovered = hoveredZone === zone;
-        const visible   = isActive || isHovered;
-        return (
-          <Html key={zone} position={pos} center>
-            <div
-              onClick={() => onZoneClick(zone)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                flexDirection: align === 'left' ? 'row' : 'row-reverse',
-                cursor: 'pointer',
-                userSelect: 'none',
-                whiteSpace: 'nowrap',
-                opacity: visible ? 1 : 0,
-                pointerEvents: visible ? 'auto' : 'none',
-                transition: 'opacity 0.2s',
-              }}
-            >
-              <div style={{
-                width: isHovered ? '22px' : '16px',
-                height: '1px',
-                background: color,
-                boxShadow: `0 0 6px ${color}`,
-                transition: 'width 0.2s',
-              }} />
-              <div style={{
-                fontFamily: 'monospace',
-                fontSize: '9px',
-                letterSpacing: '0.2em',
-                color,
-                padding: '2px 7px',
-                border: `1px solid ${color}${isActive ? 'aa' : '66'}`,
-                borderRadius: '2px',
-                background: 'rgba(0,10,8,0.92)',
-                boxShadow: isActive
-                  ? `0 0 12px ${color}55, inset 0 0 8px ${color}22`
-                  : `0 0 7px ${color}33`,
-                transform: isHovered && !isActive ? 'scale(1.06)' : 'scale(1)',
-                transition: 'all 0.2s',
-              }}>
-                {label}
-              </div>
-            </div>
-          </Html>
-        );
-      })}
-    </>
-  );
-}
-
-const ZONE_PULSE_DATA: { zone: Zone; pos: [number, number, number]; delay: number }[] = [
-  { zone: 'skills',     pos: [ 0,     0.80, 0.12], delay: 0    },
-  { zone: 'about',      pos: [ 0,     0.35, 0.12], delay: 0.55 },
-  { zone: 'experience', pos: [-0.10, -0.55, 0.10], delay: 1.1  },
-  { zone: 'education',  pos: [ 0.10, -0.55, 0.10], delay: 1.65 },
-];
-
-function ZonePulseHints({ activeZone, hoveredZone }: { activeZone: Zone | null; hoveredZone: Zone | null }) {
-  const idle = activeZone === null && hoveredZone === null;
-  return (
-    <>
-      {ZONE_PULSE_DATA.map(({ zone, pos, delay }) => (
-        <Html key={zone} position={pos} center>
-          <div style={{
-            position: 'relative', width: 0, height: 0,
-            opacity: idle ? 1 : 0,
-            transition: 'opacity 0.3s',
-            pointerEvents: 'none',
-          }}>
-            {/* solid centre dot */}
-            <div style={{
-              position: 'absolute',
-              width: '6px', height: '6px',
-              borderRadius: '50%',
-              background: '#00ffcc',
-              transform: 'translate(-50%, -50%)',
-              boxShadow: '0 0 8px #00ffcc99',
-            }} />
-            {/* first ring */}
-            <div className="zone-ring" style={{ animationDelay: `${delay}s` }} />
-            {/* second ring, offset by half period */}
-            <div className="zone-ring zone-ring-2" style={{ animationDelay: `${delay + 1.1}s` }} />
-          </div>
-        </Html>
-      ))}
-    </>
-  );
-}
 
 function ZoneProjector({ zone, onUpdate }: {
   zone: Zone | null;
@@ -152,10 +47,6 @@ function ZoneProjector({ zone, onUpdate }: {
 }
 
 export default function HumanScene({ activeZone, showHint, showLabels = true, onZoneClick, onZoneHover, onMissedClick, onAnchorUpdate }: Props) {
-  const [hoveredZone, setHoveredZone] = useState<Zone | null>(null);
-
-  const handleZoneHover = (z: Zone | null) => { setHoveredZone(z); onZoneHover(z); };
-
   return (
     <Canvas
       camera={{ position: [0.5, 0, 3.5], fov: 46 }}
@@ -175,10 +66,9 @@ export default function HumanScene({ activeZone, showHint, showLabels = true, on
         <BodyModel
           activeZone={activeZone}
           onZoneClick={onZoneClick}
-          onZoneHover={handleZoneHover}
+          onZoneHover={onZoneHover}
+          showLabels={showLabels}
         />
-        {showLabels && <ZoneLabels activeZone={activeZone} hoveredZone={hoveredZone} onZoneClick={onZoneClick} />}
-        <ZonePulseHints activeZone={activeZone} hoveredZone={hoveredZone} />
         <ZoneProjector zone={activeZone} onUpdate={onAnchorUpdate} />
 
         {/* Arrow key hint anchored below model feet — desktop only */}
