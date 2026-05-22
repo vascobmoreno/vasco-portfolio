@@ -7,7 +7,6 @@ import QuickMath      from './games/QuickMath';
 import NumberSequence from './games/NumberSequence';
 import MiniMaze       from './games/MiniMaze';
 import AnagramSolve   from './games/AnagramSolve';
-import ColorFlash     from './games/ColorFlash';
 
 type GameProps = { onSolve: () => void };
 
@@ -19,7 +18,6 @@ const GAMES: { Component: ComponentType<GameProps>; name: string }[] = [
   { Component: NumberSequence, name: 'Number Sequence' },
   { Component: MiniMaze,       name: 'Mini Maze'       },
   { Component: AnagramSolve,   name: 'Anagram'         },
-  { Component: ColorFlash,     name: 'Color Flash'     },
 ];
 
 export default function Intro({ onUnlock }: { onUnlock: () => void }) {
