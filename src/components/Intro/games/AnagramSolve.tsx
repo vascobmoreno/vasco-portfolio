@@ -16,18 +16,15 @@ const WORDS = [
 export default function AnagramSolve({ onSolve }: { onSolve: () => void }) {
   const [{ word, scrambled, hint }] = useState(() => WORDS[Math.floor(Math.random() * WORDS.length)]);
   const [input, setInput] = useState('');
-  const [shake, setShake] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
 
   useEffect(() => { ref.current?.focus(); }, []);
 
-  function submit(e: { preventDefault(): void }) {
-    e.preventDefault();
-    if (input.toUpperCase().trim() === word) {
-      onSolve();
-    } else {
-      setShake(true);
-      setTimeout(() => { setShake(false); setInput(''); ref.current?.focus(); }, 600);
+  function handleChange(val: string) {
+    const next = val.slice(0, word.length);
+    setInput(next);
+    if (next.toUpperCase() === word) {
+      setTimeout(onSolve, 150);
     }
   }
 
@@ -46,27 +43,16 @@ export default function AnagramSolve({ onSolve }: { onSolve: () => void }) {
 
       <p className="font-mono text-[10px] text-[#00ffcc]/25 tracking-widest italic">{hint}</p>
 
-      <form onSubmit={submit} className="w-full flex flex-col items-center gap-4">
-        <input
-          ref={ref}
-          value={input}
-          onChange={e => setInput(e.target.value.slice(0, word.length))}
-          className="w-full font-mono text-center text-xl bg-transparent border-b-2 outline-none pb-2 uppercase tracking-[0.2em]"
-          style={{
-            borderColor: shake ? '#ff4444' : '#00ffcc44',
-            color:       shake ? '#ff4444' : '#00ffcc',
-            transform:   shake ? 'translateX(-4px)' : 'none',
-            transition:  'all 0.15s',
-          }}
-          spellCheck={false}
-          autoComplete="off"
-          maxLength={word.length}
-        />
-        <button type="submit"
-          className="font-mono text-xs tracking-[0.3em] text-[#00ffcc]/60 border border-[#00ffcc]/30 px-6 py-2 hover:bg-[#00ffcc]/10 transition-all uppercase">
-          Solve
-        </button>
-      </form>
+      <input
+        ref={ref}
+        value={input}
+        onChange={e => handleChange(e.target.value)}
+        className="w-full font-mono text-center text-xl bg-transparent border-b-2 outline-none pb-2 uppercase tracking-[0.2em]"
+        style={{ borderColor: '#00ffcc44', color: '#00ffcc' }}
+        spellCheck={false}
+        autoComplete="off"
+        maxLength={word.length}
+      />
     </div>
   );
 }

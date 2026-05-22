@@ -11,18 +11,14 @@ const PHRASES = [
 export default function TypePhrase({ onSolve }: { onSolve: () => void }) {
   const [phrase] = useState(() => PHRASES[Math.floor(Math.random() * PHRASES.length)]);
   const [input, setInput] = useState('');
-  const [shake, setShake] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
 
   useEffect(() => { ref.current?.focus(); }, []);
 
-  function submit(e: { preventDefault(): void }) {
-    e.preventDefault();
-    if (input.toUpperCase().trim() === phrase) {
-      onSolve();
-    } else {
-      setShake(true);
-      setTimeout(() => { setShake(false); setInput(''); ref.current?.focus(); }, 600);
+  function handleChange(val: string) {
+    setInput(val);
+    if (val.toUpperCase().trim() === phrase) {
+      setTimeout(onSolve, 150);
     }
   }
 
@@ -43,25 +39,15 @@ export default function TypePhrase({ onSolve }: { onSolve: () => void }) {
         })}
       </div>
 
-      <form onSubmit={submit} className="w-full flex flex-col items-center gap-4">
-        <input
-          ref={ref}
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          className="w-full font-mono text-center text-lg bg-transparent border-b-2 outline-none pb-2 uppercase tracking-[0.2em] text-transparent caret-[#00ffcc]"
-          style={{
-            borderColor: shake ? '#ff4444' : '#00ffcc44',
-            transform: shake ? 'translateX(-4px)' : 'none',
-            transition: 'border-color 0.2s, transform 0.1s',
-          }}
-          spellCheck={false}
-          autoComplete="off"
-        />
-        <button type="submit"
-          className="font-mono text-xs tracking-[0.3em] text-[#00ffcc]/60 border border-[#00ffcc]/30 px-6 py-2 hover:bg-[#00ffcc]/10 transition-all uppercase">
-          Unlock →
-        </button>
-      </form>
+      <input
+        ref={ref}
+        value={input}
+        onChange={e => handleChange(e.target.value)}
+        className="w-full font-mono text-center text-lg bg-transparent border-b-2 outline-none pb-2 uppercase tracking-[0.2em] text-transparent caret-[#00ffcc]"
+        style={{ borderColor: '#00ffcc44' }}
+        spellCheck={false}
+        autoComplete="off"
+      />
     </div>
   );
 }
