@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, Html } from '@react-three/drei';
 import { Suspense, useRef } from 'react';
 import * as THREE from 'three';
 import BodyModel, { type Zone } from './BodyModel';
