@@ -182,17 +182,25 @@
   height: 100%;
   background: #0a0a0f;
 }
+@keyframes glitch-show {
+  0%    { opacity: 1; }
+  24.9% { opacity: 1; }
+  25%   { opacity: 0; }
+  100%  { opacity: 0; }
+}
 .glitch-text::before {
   left: 2px;
   text-shadow: -2px 0 #49fc00;
   clip: rect(10px, 9999px, 36px, 0);
-  animation: glitch-anim-2 3s infinite linear alternate-reverse;
+  animation: glitch-anim-2 3s infinite linear alternate-reverse,
+             glitch-show 8s infinite linear;
 }
 .glitch-text::after {
   left: -2px;
   text-shadow: -2px 0 #b200fc;
   clip: rect(34px, 9999px, 56px, 0);
-  animation: glitch-anim 2.5s infinite linear alternate-reverse;
+  animation: glitch-anim 2.5s infinite linear alternate-reverse,
+             glitch-show 8s infinite linear;
 }
 
 @layer utilities {
