@@ -8,7 +8,7 @@ export default function ReactionTest({ onSolve }: { onSolve: () => void }) {
   const [ms, setMs] = useState(0);
   const [tooEarly, setTooEarly] = useState(false);
   const t0 = useRef(0);
-  const timer = useRef<ReturnType<typeof setTimeout>>();
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
