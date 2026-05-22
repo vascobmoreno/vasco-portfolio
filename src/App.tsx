@@ -42,10 +42,88 @@ function ContactButton() {
   );
 }
 
+function DownloadCVButton({ onClick }: { onClick: () => void }) {
+  return (
+    <motion.button
+      onClick={onClick}
+      initial={{ opacity: 0, x: -24 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 1.2 }}
+      className="pointer-events-auto mt-2 inline-flex items-center gap-2.5 border border-[#00ffcc]/20 px-3 py-2 rounded-sm hover:border-[#00ffcc]/45 hover:bg-[#00ffcc]/5 transition-all group"
+    >
+      <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5 text-[#00ffcc]/50 group-hover:text-[#00ffcc]/80 transition-colors" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 3v13M7 11l5 5 5-5" />
+        <path d="M3 19h18" />
+      </svg>
+      <span className="text-[10px] font-mono tracking-[0.2em] text-[#00ffcc]/50 group-hover:text-[#00ffcc]/80 transition-colors uppercase">Download CV</span>
+    </motion.button>
+  );
+}
+
+function CVModal({ onClose }: { onClose: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8"
+      style={{ background: 'rgba(2,12,10,0.88)', backdropFilter: 'blur(6px)' }}
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 16 }}
+        transition={{ duration: 0.25 }}
+        className="relative flex flex-col w-full max-w-3xl"
+        style={{ height: 'min(88vh, 860px)' }}
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 py-3 border border-b-0 border-[#00ffcc]/20 rounded-t-sm bg-[#020c0a]">
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-[9px] tracking-[0.5em] text-[#00ffcc]/40 uppercase">Curriculum Vitae</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <a
+              href="/vasco-moreno-cv.pdf"
+              download="vasco-moreno-cv.pdf"
+              className="inline-flex items-center gap-2 font-mono text-[9px] tracking-[0.3em] text-[#00ffcc]/60 border border-[#00ffcc]/25 px-3 py-1.5 rounded-sm hover:bg-[#00ffcc]/10 hover:text-[#00ffcc] transition-all uppercase"
+            >
+              <svg viewBox="0 0 24 24" fill="none" className="w-3 h-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 3v13M7 11l5 5 5-5" />
+                <path d="M3 19h18" />
+              </svg>
+              Download
+            </a>
+            <button
+              onClick={onClose}
+              className="font-mono text-[#00ffcc]/35 hover:text-[#00ffcc]/80 transition-colors text-lg leading-none"
+              aria-label="Close"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+
+        {/* PDF viewer */}
+        <iframe
+          src="/vasco-moreno-cv.pdf"
+          className="flex-1 w-full border border-[#00ffcc]/20 rounded-b-sm"
+          style={{ background: '#111' }}
+          title="Vasco Moreno CV"
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export default function App() {
   const [unlocked, setUnlocked]      = useState(false);
   const [isMobile, setIsMobile]      = useState(false);
   const [modelRevealed, setRevealed] = useState(false);
+  const [cvOpen, setCvOpen]          = useState(false);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -111,6 +189,7 @@ export default function App() {
               <div className="flex flex-col items-start">
                 <LinkedInButton />
                 <ContactButton />
+                <DownloadCVButton onClick={() => setCvOpen(true)} />
               </div>
             </div>
           </>
@@ -173,6 +252,7 @@ export default function App() {
 
                   <LinkedInButton />
                   <ContactButton />
+                  <DownloadCVButton onClick={() => setCvOpen(true)} />
 
                   <motion.button
                     initial={{ opacity: 0, y: 16 }}
@@ -203,6 +283,10 @@ export default function App() {
         )}
 
       </div>
+
+      <AnimatePresence>
+        {cvOpen && <CVModal onClose={() => setCvOpen(false)} />}
+      </AnimatePresence>
     </div>
   );
 }
