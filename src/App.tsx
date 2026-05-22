@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import Navbar from './components/Navbar';
 import InteractiveBody from './components/InteractiveBody';
-import ChessIntro from './components/ChessIntro';
 
 function LinkedInButton() {
   return (
@@ -43,11 +42,8 @@ function ContactButton() {
 }
 
 export default function App() {
-  const [unlocked, setUnlocked]       = useState(false);
-  const [isMobile, setIsMobile]       = useState(false);
-  const [modelRevealed, setRevealed]  = useState(false);
-
-  if (!unlocked) return <ChessIntro onUnlock={() => setUnlocked(true)} />;
+  const [isMobile, setIsMobile]      = useState(false);
+  const [modelRevealed, setRevealed] = useState(false);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
