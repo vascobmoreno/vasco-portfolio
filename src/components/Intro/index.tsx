@@ -91,12 +91,12 @@ export default function Intro({ onUnlock }: { onUnlock: () => void }) {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15, duration: 0.5 }}
-              className="flex flex-col items-center gap-4"
+              className="flex flex-col items-center gap-4 w-full px-4 text-center"
             >
               <p className="font-mono text-[10px] tracking-[0.6em] text-[#00ffcc]/50 uppercase">
                 Identity verified
               </p>
-              <h1 className="font-mono text-4xl md:text-5xl font-bold text-white tracking-[0.15em] glow">
+              <h1 className="font-mono text-3xl md:text-5xl font-bold text-white tracking-[0.1em] md:tracking-[0.15em] glow">
                 ACCESS GRANTED
               </h1>
               <motion.div
