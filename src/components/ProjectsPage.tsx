@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+interface HowItWorksStep {
+  title:       string;
+  description: string;
+}
+
 interface Project {
   title:       string;
   description: string;
@@ -10,10 +15,12 @@ interface Project {
   year:        string;
   status:      'completed' | 'in progress' | 'ongoing' | 'archived';
   detail?: {
-    longDescription: string;
-    whatItDoes:            string[];
+    logo?:                  string;
+    longDescription:        string;
+    whatItDoes:             string[];
     whatMakesItInteresting: string[];
-    website?: string;
+    howItWorks?:            HowItWorksStep[];
+    website?:               string;
   };
 }
 
@@ -27,6 +34,7 @@ const PROJECTS: Project[] = [
     year:        '2026',
     status:      'ongoing',
     detail: {
+      logo: '/the_tips_lobby_logo.png',
       longDescription:
         'A full-stack web app where users create private lobbies, invite friends, and compare sports predictions before kick-off — no real money involved, just bragging rights.',
       whatItDoes: [
@@ -40,6 +48,32 @@ const PROJECTS: Project[] = [
         'Every pick feeds into a global stats engine — so even without a lobby, you can browse any match and instantly see how the crowd is leaning',
         'After results come in, picks are automatically resolved and each user\'s accuracy stats update in real time',
         'All community percentages are aggregated anonymously — no individual data is ever exposed',
+      ],
+      howItWorks: [
+        {
+          title: 'Browse matches',
+          description: 'Open the app and see all upcoming football and basketball matches for today and tomorrow — organised by league, with kick-off times.',
+        },
+        {
+          title: 'Make your picks',
+          description: 'For each match, choose your predictions: who wins, whether both teams score, how many goals, and more. Picks lock at kick-off.',
+        },
+        {
+          title: 'See the community split',
+          description: 'Instantly see what percentage of all users picked each outcome — before the game starts. Is the crowd backing the favourite, or is there a surprise upset coming?',
+        },
+        {
+          title: 'Create or join a lobby',
+          description: 'Create a private lobby and share the invite code with friends, a group chat, or your community. Everyone\'s picks are tracked in the same place.',
+        },
+        {
+          title: 'Compete on the leaderboard',
+          description: 'Once results come in, picks are automatically resolved. The lobby leaderboard updates in real time — see who called it right and who got it wrong.',
+        },
+        {
+          title: 'Track your stats',
+          description: 'Your profile tracks everything: total picks made, how many were resolved, and your overall accuracy rate. Improve your record week after week.',
+        },
       ],
       website: 'https://the-tips-lobby.vercel.app/',
     },
@@ -87,7 +121,7 @@ function ProjectCard({ project, index, onClick }: { project: Project; index: num
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.08, duration: 0.4 }}
       onClick={hasDetail ? onClick : undefined}
-      className={`border border-[#00ffcc]/12 p-6 rounded-sm bg-[#00ffcc]/[0.02] hover:border-[#00ffcc]/25 hover:bg-[#00ffcc]/[0.04] transition-all group flex flex-col gap-4 ${hasDetail ? 'cursor-pointer' : ''}`}
+      className={`relative overflow-hidden border border-[#00ffcc]/12 p-6 rounded-sm bg-[#00ffcc]/[0.02] hover:border-[#00ffcc]/25 transition-all group flex flex-col gap-4 ${hasDetail ? 'cursor-pointer' : ''}`}
     >
       {/* Top row */}
       <div className="flex items-start justify-between gap-4">
@@ -114,53 +148,25 @@ function ProjectCard({ project, index, onClick }: { project: Project; index: num
         ))}
       </div>
 
-      {/* Footer: links or "view" prompt */}
-      <div className="flex items-center justify-between pt-1 border-t border-[#00ffcc]/08">
-        <div className="flex items-center gap-4">
-          {project.github && (
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={e => e.stopPropagation()}
-              className="inline-flex items-center gap-1.5 font-mono text-[9px] tracking-[0.2em] text-[#00ffcc]/40 hover:text-[#00ffcc]/80 transition-colors uppercase"
-            >
-              <svg viewBox="0 0 24 24" className="w-3 h-3 fill-current">
-                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-              </svg>
-              GitHub
-            </a>
-          )}
-          {project.live && (
-            <a
-              href={project.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={e => e.stopPropagation()}
-              className="inline-flex items-center gap-1.5 font-mono text-[9px] tracking-[0.2em] text-[#00ffcc]/40 hover:text-[#00ffcc]/80 transition-colors uppercase"
-            >
-              <svg viewBox="0 0 24 24" fill="none" className="w-3 h-3" stroke="currentColor" strokeWidth="2">
-                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
-              </svg>
-              Live
-            </a>
-          )}
-        </div>
-        {hasDetail && (
-          <span className="font-mono text-[9px] tracking-[0.2em] text-[#00ffcc]/30 group-hover:text-[#00ffcc]/70 transition-colors uppercase flex items-center gap-1">
-            View
-            <svg viewBox="0 0 24 24" fill="none" className="w-2.5 h-2.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      {/* Curtain overlay */}
+      {hasDetail && (
+        <div className="absolute inset-x-0 bottom-0 h-1/2 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out flex items-center justify-center" style={{ background: 'linear-gradient(to bottom, transparent 0%, #0a0a0f 35%)' }}>
+          <span className="font-mono text-[10px] tracking-[0.35em] text-[#00ffcc] uppercase flex items-center gap-2">
+            View Project
+            <svg viewBox="0 0 24 24" fill="none" className="w-3 h-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </span>
-        )}
-      </div>
+        </div>
+      )}
     </motion.div>
   );
 }
 
 function ProjectDetail({ project, onBack }: { project: Project; onBack: () => void }) {
   const d = project.detail!;
+  const siteUrl = project.live || d.website;
+
   return (
     <motion.div
       key="detail"
@@ -169,23 +175,51 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
       exit={{ opacity: 0, x: 24 }}
       transition={{ duration: 0.3 }}
     >
-      {/* Back to projects */}
-      <button
-        onClick={onBack}
-        className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.25em] text-[#00ffcc]/70 border border-[#00ffcc]/25 px-4 py-2 rounded-sm bg-[#00ffcc]/5 hover:text-[#00ffcc] hover:border-[#00ffcc]/50 transition-all uppercase mb-12"
-      >
-        <BackArrow />
-        All Projects
-      </button>
+      {/* Top bar: back + visit site */}
+      <div className="flex items-center justify-between mb-12">
+        <button
+          onClick={onBack}
+          className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.25em] text-[#00ffcc]/70 border border-[#00ffcc]/25 px-4 py-2 rounded-sm bg-[#00ffcc]/5 hover:text-[#00ffcc] hover:border-[#00ffcc]/50 transition-all uppercase"
+        >
+          <BackArrow />
+          All Projects
+        </button>
 
-      {/* Header */}
-      <div className="flex flex-wrap items-center gap-3 mb-3">
-        <span className={`font-mono text-[8px] tracking-[0.3em] uppercase border px-2 py-0.5 rounded-sm ${STATUS_COLORS[project.status]}`}>
-          {project.status}
-        </span>
-        <span className="font-mono text-[9px] text-gray-600">{project.year}</span>
+        {siteUrl && (
+          <a
+            href={siteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.25em] text-[#00ffcc]/70 border border-[#00ffcc]/25 px-5 py-2 rounded-sm bg-[#00ffcc]/5 hover:text-[#00ffcc] hover:border-[#00ffcc]/50 transition-all uppercase"
+          >
+            <svg viewBox="0 0 24 24" fill="none" className="w-3 h-3" stroke="currentColor" strokeWidth="2">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
+            </svg>
+            Visit Site
+          </a>
+        )}
       </div>
-      <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">{project.title}</h1>
+
+      {/* Logo + header */}
+      <div className="flex items-center gap-5 mb-4">
+        {d.logo && (
+          <img
+            src={d.logo}
+            alt={`${project.title} logo`}
+            className="w-14 h-14 rounded-sm object-contain shrink-0"
+          />
+        )}
+        <div>
+          <div className="flex flex-wrap items-center gap-3 mb-2">
+            <span className={`font-mono text-[8px] tracking-[0.3em] uppercase border px-2 py-0.5 rounded-sm ${STATUS_COLORS[project.status]}`}>
+              {project.status}
+            </span>
+            <span className="font-mono text-[9px] text-gray-600">{project.year}</span>
+          </div>
+          <h1 className="text-4xl font-bold text-white tracking-tight">{project.title}</h1>
+        </div>
+      </div>
+
       <p className="text-gray-400 text-sm font-mono mb-10 leading-relaxed max-w-2xl">{d.longDescription}</p>
 
       {/* Tech */}
@@ -210,6 +244,33 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
         </ul>
       </div>
 
+      {/* How it works */}
+      {d.howItWorks && d.howItWorks.length > 0 && (
+        <div className="mb-10">
+          <p className="font-mono text-[9px] tracking-[0.4em] text-[#00ffcc]/35 uppercase mb-6">How it works</p>
+          <div className="flex flex-col gap-0">
+            {d.howItWorks.map((step, i) => (
+              <div key={i} className="flex gap-5 group">
+                {/* Step number + connector */}
+                <div className="flex flex-col items-center shrink-0">
+                  <div className="w-6 h-6 rounded-full border border-[#00ffcc]/25 bg-[#00ffcc]/5 flex items-center justify-center shrink-0">
+                    <span className="font-mono text-[9px] text-[#00ffcc]/60">{i + 1}</span>
+                  </div>
+                  {i < d.howItWorks!.length - 1 && (
+                    <div className="w-px flex-1 bg-[#00ffcc]/10 my-1" />
+                  )}
+                </div>
+                {/* Content */}
+                <div className={`pb-6 ${i === d.howItWorks!.length - 1 ? '' : ''}`}>
+                  <p className="font-mono text-xs font-semibold text-white mb-1">{step.title}</p>
+                  <p className="font-mono text-xs text-gray-500 leading-relaxed">{step.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* What makes it interesting */}
       <div className="mb-12">
         <p className="font-mono text-[9px] tracking-[0.4em] text-[#00ffcc]/35 uppercase mb-5">What makes it interesting</p>
@@ -223,9 +284,9 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
         </ul>
       </div>
 
-      {/* Links */}
-      <div className="flex flex-wrap gap-4 pt-6 border-t border-[#00ffcc]/10">
-        {project.github && (
+      {/* GitHub link if present */}
+      {project.github && (
+        <div className="pt-6 border-t border-[#00ffcc]/10">
           <a
             href={project.github}
             target="_blank"
@@ -237,21 +298,8 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
             </svg>
             GitHub
           </a>
-        )}
-        {(project.live || d.website) && (
-          <a
-            href={project.live || d.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.25em] text-[#00ffcc]/70 border border-[#00ffcc]/25 px-5 py-2.5 rounded-sm bg-[#00ffcc]/5 hover:text-[#00ffcc] hover:border-[#00ffcc]/50 transition-all uppercase"
-          >
-            <svg viewBox="0 0 24 24" fill="none" className="w-3 h-3" stroke="currentColor" strokeWidth="2">
-              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
-            </svg>
-            Visit Site
-          </a>
-        )}
-      </div>
+        </div>
+      )}
     </motion.div>
   );
 }
