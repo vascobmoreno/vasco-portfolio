@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// 1. Go to web3forms.com and enter vascobmoreno@gmail.com to get your free key
-// 2. Replace the string below with your key
-const ACCESS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY';
-
-type Status = 'idle' | 'sending' | 'sent' | 'error';
+type Status = 'idle' | 'sent';
 
 const inputClass =
   'bg-transparent border-b border-[#00ffcc]/20 pb-2 font-mono text-sm text-white outline-none focus:border-[#00ffcc]/50 transition-colors placeholder:text-gray-700 w-full';
@@ -18,27 +14,15 @@ export default function ContactPage({ onBack }: { onBack: () => void }) {
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm(prev => ({ ...prev, [f]: e.target.value }));
 
-  async function submit(e: React.FormEvent) {
+  function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (status === 'sending') return;
-    setStatus('sending');
-    try {
-      const res  = await fetch('https://api.web3forms.com/submit', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          access_key: ACCESS_KEY,
-          subject:    form.subject || `Portfolio contact from ${form.name}`,
-          from_name:  form.name,
-          email:      form.email,
-          message:    form.message,
-        }),
-      });
-      const data = await res.json();
-      setStatus(data.success ? 'sent' : 'error');
-    } catch {
-      setStatus('error');
-    }
+    const subject = form.subject || `Portfolio contact from ${form.name}`;
+    const body    = `Name: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`;
+    window.open(
+      `mailto:vascobmoreno@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+      '_blank',
+    );
+    setStatus('sent');
   }
 
   return (
@@ -67,6 +51,7 @@ export default function ContactPage({ onBack }: { onBack: () => void }) {
         <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">Let's work<br />together.</h1>
         <p className="text-gray-400 text-sm font-mono mb-12 leading-relaxed">
           Open to freelance projects, consulting, and full-time opportunities.<br />
+          I also provide ongoing maintenance for the services I build.<br />
           I'll get back to you within 24 hours.
         </p>
 
@@ -124,21 +109,11 @@ export default function ContactPage({ onBack }: { onBack: () => void }) {
                 />
               </div>
 
-              {status === 'error' && (
-                <p className="font-mono text-xs text-red-400/80">Something went wrong — please try again or email me directly.</p>
-              )}
-
               <button
                 type="submit"
-                disabled={status === 'sending'}
-                className="self-start inline-flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] text-[#00ffcc]/70 border border-[#00ffcc]/30 px-8 py-3 hover:bg-[#00ffcc]/8 hover:text-[#00ffcc] hover:border-[#00ffcc]/60 transition-all uppercase disabled:opacity-40"
+                className="self-start inline-flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] text-[#00ffcc]/70 border border-[#00ffcc]/30 px-8 py-3 hover:bg-[#00ffcc]/8 hover:text-[#00ffcc] hover:border-[#00ffcc]/60 transition-all uppercase"
               >
-                {status === 'sending' ? (
-                  <>
-                    <span className="animate-spin w-3 h-3 border border-[#00ffcc]/40 border-t-[#00ffcc] rounded-full" />
-                    Sending...
-                  </>
-                ) : 'Send Message →'}
+                Send Message →
               </button>
             </motion.form>
           )}

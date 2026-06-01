@@ -156,9 +156,9 @@ function ButtonColumn({ onContact, onCvOpen, onProjects }: { onContact: () => vo
   return (
     <div className="flex flex-col items-start">
       <ContactButton   onClick={onContact}  />
+      <ProjectsButton  onClick={onProjects} />
       <LinkedInButton />
       <DownloadCVButton onClick={onCvOpen}  />
-      <ProjectsButton  onClick={onProjects} />
     </div>
   );
 }
@@ -317,9 +317,9 @@ export default function App() {
 
                   <div className="flex flex-col items-center mt-1">
                     <ContactButton   onClick={() => setPage('contact')}  />
+                    <ProjectsButton  onClick={() => setPage('projects')} />
                     <LinkedInButton />
                     <DownloadCVButton onClick={() => setCvOpen(true)}    />
-                    <ProjectsButton  onClick={() => setPage('projects')} />
                   </div>
 
                   <motion.button
