@@ -15,12 +15,12 @@ interface Project {
   year:        string;
   status:      'completed' | 'in progress' | 'ongoing' | 'archived';
   detail?: {
-    logo?:                  string;
-    longDescription:        string;
-    whatItDoes:             string[];
-    whatMakesItInteresting: string[];
-    howItWorks?:            HowItWorksStep[];
-    website?:               string;
+    logo?:                   string;
+    longDescription:         string;
+    whatItDoes?:             string[];
+    whatMakesItInteresting?: string[];
+    howItWorks?:             HowItWorksStep[];
+    website?:                string;
   };
 }
 
@@ -76,6 +76,29 @@ const PROJECTS: Project[] = [
         },
       ],
       website: 'https://the-tips-lobby.vercel.app/',
+    },
+  },
+  {
+    title:       'LPL, S.A — Trevi',
+    description: 'A website for a food production and distribution company, showcasing their brand and full product catalogue.',
+    tech:        ['HTML', 'CSS', 'JavaScript'],
+    github:      '',
+    live:        'https://www.trevi.pt/testev2/',
+    year:        '2024',
+    status:      'completed',
+    detail: {
+      logo: '/logo_trevi.png',
+      longDescription:
+        'TREVI is a website for a food production and distribution company, built with plain HTML, CSS, and JavaScript. It serves as both a brand showcase and a full product catalogue, available in four languages — Portuguese, Spanish, English, and French.',
+      whatItDoes: [
+        'Products are organised by category and can be filtered or searched, with a live image grid appearing as the user types.',
+        'Each product opens a detailed modal showing all available sizes and variants, reference codes, and EAN/ITF barcodes — all copyable with a single click.',
+        'For products with quality grades, these are clearly distinguished in the variant table.',
+        'An order list side panel lets users add products, adjust quantities, and view, copy, or print their full order list.',
+        'A separate print-optimised PDF catalogue is also available.',
+        'Available in four languages — Portuguese, Spanish, English, and French.',
+      ],
+      website: 'https://www.trevi.pt/testev2/',
     },
   },
   {
@@ -232,17 +255,19 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
       </div>
 
       {/* What it does */}
-      <div className="mb-10">
-        <p className="font-mono text-[9px] tracking-[0.4em] text-[#00ffcc]/35 uppercase mb-5">What it does</p>
-        <ul className="flex flex-col gap-3">
-          {d.whatItDoes.map((item, i) => (
-            <li key={i} className="flex gap-3 font-mono text-xs text-gray-400 leading-relaxed">
-              <span className="text-[#00ffcc]/40 mt-0.5 shrink-0">–</span>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
+      {d.whatItDoes && d.whatItDoes.length > 0 && (
+        <div className="mb-10">
+          <p className="font-mono text-[9px] tracking-[0.4em] text-[#00ffcc]/35 uppercase mb-5">What it does</p>
+          <ul className="flex flex-col gap-3">
+            {d.whatItDoes.map((item, i) => (
+              <li key={i} className="flex gap-3 font-mono text-xs text-gray-400 leading-relaxed">
+                <span className="text-[#00ffcc]/40 mt-0.5 shrink-0">–</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* How it works */}
       {d.howItWorks && d.howItWorks.length > 0 && (
@@ -272,17 +297,19 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
       )}
 
       {/* What makes it interesting */}
-      <div className="mb-12">
-        <p className="font-mono text-[9px] tracking-[0.4em] text-[#00ffcc]/35 uppercase mb-5">What makes it interesting</p>
-        <ul className="flex flex-col gap-3">
-          {d.whatMakesItInteresting.map((item, i) => (
-            <li key={i} className="flex gap-3 font-mono text-xs text-gray-400 leading-relaxed">
-              <span className="text-[#00ffcc]/40 mt-0.5 shrink-0">–</span>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
+      {d.whatMakesItInteresting && d.whatMakesItInteresting.length > 0 && (
+        <div className="mb-12">
+          <p className="font-mono text-[9px] tracking-[0.4em] text-[#00ffcc]/35 uppercase mb-5">What makes it interesting</p>
+          <ul className="flex flex-col gap-3">
+            {d.whatMakesItInteresting.map((item, i) => (
+              <li key={i} className="flex gap-3 font-mono text-xs text-gray-400 leading-relaxed">
+                <span className="text-[#00ffcc]/40 mt-0.5 shrink-0">–</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* GitHub link if present */}
       {project.github && (
@@ -336,7 +363,6 @@ export default function ProjectsPage({ onBack }: { onBack: () => void }) {
                 Back
               </button>
 
-              <p className="font-mono text-[10px] tracking-[0.5em] text-[#00ffcc]/35 uppercase mb-3">Selected work</p>
               <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">Projects.</h1>
               <p className="text-gray-400 text-sm font-mono mb-12 leading-relaxed">
                 A collection of projects I've built or been involved in.
