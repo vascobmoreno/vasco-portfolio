@@ -3,6 +3,36 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import Navbar from './components/Navbar';
 import InteractiveBody from './components/InteractiveBody';
+import ContactPage from './components/ContactPage';
+import ProjectsPage from './components/ProjectsPage';
+
+type Page = 'home' | 'contact' | 'projects';
+
+/* ── Shared button styles ──────────────────────────────────────── */
+const btnClass =
+  'pointer-events-auto mt-2 inline-flex items-center gap-2.5 border border-[#00ffcc]/20 px-3 py-2 rounded-sm hover:border-[#00ffcc]/45 hover:bg-[#00ffcc]/5 transition-all group';
+const btnText =
+  'text-[10px] font-mono tracking-[0.2em] text-[#00ffcc]/50 group-hover:text-[#00ffcc]/80 transition-colors uppercase';
+const btnIcon =
+  'w-3.5 h-3.5 text-[#00ffcc]/50 group-hover:text-[#00ffcc]/80 transition-colors';
+
+function ContactButton({ onClick }: { onClick: () => void }) {
+  return (
+    <motion.button
+      onClick={onClick}
+      initial={{ opacity: 0, x: -24 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.9 }}
+      className={`${btnClass} mt-5`}
+    >
+      <svg viewBox="0 0 24 24" fill="none" className={btnIcon} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="M2 7l10 7 10-7" />
+      </svg>
+      <span className={btnText}>Contact me</span>
+    </motion.button>
+  );
+}
 
 function LinkedInButton() {
   return (
@@ -12,31 +42,13 @@ function LinkedInButton() {
       rel="noopener noreferrer"
       initial={{ opacity: 0, x: -24 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 0.9 }}
-      className="pointer-events-auto mt-7 inline-flex items-center gap-2.5 border border-[#00ffcc]/20 px-3 py-2 rounded-sm hover:border-[#00ffcc]/45 hover:bg-[#00ffcc]/5 transition-all group"
+      transition={{ delay: 1.05 }}
+      className={btnClass}
     >
-      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current text-[#00ffcc]/50 group-hover:text-[#00ffcc]/80 transition-colors">
+      <svg viewBox="0 0 24 24" className={`${btnIcon} fill-current`}>
         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
       </svg>
-      <span className="text-[10px] font-mono tracking-[0.2em] text-[#00ffcc]/50 group-hover:text-[#00ffcc]/80 transition-colors uppercase">LinkedIn</span>
-    </motion.a>
-  );
-}
-
-function ContactButton() {
-  return (
-    <motion.a
-      href="mailto:vascobmoreno@gmail.com"
-      initial={{ opacity: 0, x: -24 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 1.05 }}
-      className="pointer-events-auto mt-2 inline-flex items-center gap-2.5 border border-[#00ffcc]/20 px-3 py-2 rounded-sm hover:border-[#00ffcc]/45 hover:bg-[#00ffcc]/5 transition-all group"
-    >
-      <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5 text-[#00ffcc]/50 group-hover:text-[#00ffcc]/80 transition-colors" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="4" width="20" height="16" rx="2" />
-        <path d="M2 7l10 7 10-7" />
-      </svg>
-      <span className="text-[10px] font-mono tracking-[0.2em] text-[#00ffcc]/50 group-hover:text-[#00ffcc]/80 transition-colors uppercase">Contact me</span>
+      <span className={btnText}>LinkedIn</span>
     </motion.a>
   );
 }
@@ -48,14 +60,51 @@ function DownloadCVButton({ onClick }: { onClick: () => void }) {
       initial={{ opacity: 0, x: -24 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 1.2 }}
-      className="pointer-events-auto mt-2 inline-flex items-center gap-2.5 border border-[#00ffcc]/20 px-3 py-2 rounded-sm hover:border-[#00ffcc]/45 hover:bg-[#00ffcc]/5 transition-all group"
+      className={btnClass}
     >
-      <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5 text-[#00ffcc]/50 group-hover:text-[#00ffcc]/80 transition-colors" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" className={btnIcon} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 3v13M7 11l5 5 5-5" />
         <path d="M3 19h18" />
       </svg>
-      <span className="text-[10px] font-mono tracking-[0.2em] text-[#00ffcc]/50 group-hover:text-[#00ffcc]/80 transition-colors uppercase">Download CV</span>
+      <span className={btnText}>Download CV</span>
     </motion.button>
+  );
+}
+
+function ProjectsButton({ onClick }: { onClick: () => void }) {
+  return (
+    <motion.button
+      onClick={onClick}
+      initial={{ opacity: 0, x: -24 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 1.35 }}
+      className={btnClass}
+    >
+      <svg viewBox="0 0 24 24" fill="none" className={btnIcon} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2" />
+        <path d="M8 21h8M12 17v4" />
+      </svg>
+      <span className={btnText}>Projects</span>
+    </motion.button>
+  );
+}
+
+function FreelanceBadge() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -24 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.8 }}
+      className="mt-5 inline-flex items-center gap-2.5 border border-[#00ffcc]/35 px-4 py-2 rounded-sm bg-[#00ffcc]/5"
+    >
+      <span className="relative flex h-2 w-2 shrink-0">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ffcc] opacity-75" />
+        <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00ffcc]" />
+      </span>
+      <span className="font-mono text-[10px] tracking-[0.2em] text-[#00ffcc]/80 uppercase">
+        Open to freelance work
+      </span>
+    </motion.div>
   );
 }
 
@@ -79,11 +128,8 @@ function CVModal({ onClose }: { onClose: () => void }) {
         style={{ height: 'min(88vh, 860px)' }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border border-b-0 border-[#00ffcc]/20 rounded-t-sm bg-[#020c0a]">
-          <div className="flex items-center gap-3">
-            <span className="font-mono text-[9px] tracking-[0.5em] text-[#00ffcc]/40 uppercase">Curriculum Vitae</span>
-          </div>
+          <span className="font-mono text-[9px] tracking-[0.5em] text-[#00ffcc]/40 uppercase">Curriculum Vitae</span>
           <div className="flex items-center gap-3">
             <a
               href="/vasco-moreno-cv.pdf"
@@ -96,29 +142,29 @@ function CVModal({ onClose }: { onClose: () => void }) {
               </svg>
               Download
             </a>
-            <button
-              onClick={onClose}
-              className="font-mono text-[#00ffcc]/35 hover:text-[#00ffcc]/80 transition-colors text-lg leading-none"
-              aria-label="Close"
-            >
-              ×
-            </button>
+            <button onClick={onClose} className="font-mono text-[#00ffcc]/35 hover:text-[#00ffcc]/80 transition-colors text-lg leading-none" aria-label="Close">×</button>
           </div>
         </div>
-
-        {/* PDF viewer */}
-        <iframe
-          src="/vasco-moreno-cv.pdf"
-          className="flex-1 w-full border border-[#00ffcc]/20 rounded-b-sm"
-          style={{ background: '#111' }}
-          title="Vasco Moreno CV"
-        />
+        <iframe src="/vasco-moreno-cv.pdf" className="flex-1 w-full border border-[#00ffcc]/20 rounded-b-sm" style={{ background: '#111' }} title="Vasco Moreno CV" />
       </motion.div>
     </motion.div>
   );
 }
 
+/* ── Button column used in both layouts ────────────────────────── */
+function ButtonColumn({ onContact, onCvOpen, onProjects }: { onContact: () => void; onCvOpen: () => void; onProjects: () => void }) {
+  return (
+    <div className="flex flex-col items-start">
+      <ContactButton   onClick={onContact}  />
+      <LinkedInButton />
+      <DownloadCVButton onClick={onCvOpen}  />
+      <ProjectsButton  onClick={onProjects} />
+    </div>
+  );
+}
+
 export default function App() {
+  const [page, setPage]              = useState<Page>('home');
   const [isMobile, setIsMobile]      = useState(false);
   const [modelRevealed, setRevealed] = useState(false);
   const [cvOpen, setCvOpen]          = useState(false);
@@ -130,13 +176,31 @@ export default function App() {
     return () => window.removeEventListener('resize', check);
   }, []);
 
+  const nav = <Navbar currentPage={page} onNavigate={setPage} />;
+
+  /* ── Non-home pages ── */
+  if (page === 'contact') return (
+    <div className="min-h-screen bg-dark flex flex-col">
+      {nav}
+      <ContactPage onBack={() => setPage('home')} />
+    </div>
+  );
+
+  if (page === 'projects') return (
+    <div className="min-h-screen bg-dark flex flex-col">
+      {nav}
+      <ProjectsPage onBack={() => setPage('home')} />
+    </div>
+  );
+
+  /* ── Home page ── */
   return (
     <div className="h-screen overflow-hidden bg-dark flex flex-col">
-      <Navbar />
+      {nav}
 
       <div className="flex-1 relative min-h-0">
 
-        {/* ── Desktop layout ── */}
+        {/* ── Desktop ── */}
         {!isMobile && (
           <>
             <div className="absolute inset-0">
@@ -170,51 +234,31 @@ export default function App() {
                 className="text-lg text-gray-400 font-light h-7"
               >
                 <TypeAnimation
-                  sequence={[
-                    'Software Engineer', 2000,
-                    'Tech Enthusiast',   2000,
-                    'Problem Solver',    2000,
-                    'Developer',         2000,
-                  ]}
+                  sequence={['Software Engineer', 2000, 'Tech Enthusiast', 2000, 'Problem Solver', 2000, 'Developer', 2000]}
                   wrapper="span"
                   speed={50}
                   repeat={Infinity}
                 />
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, x: -24 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.8 }}
-                className="mt-4 inline-flex items-center gap-2"
-              >
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ffcc] opacity-60" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00ffcc]" />
-                </span>
-                <span className="font-mono text-[10px] tracking-[0.25em] text-[#00ffcc]/55 uppercase">
-                  Available for freelance
-                </span>
-              </motion.div>
+              <FreelanceBadge />
 
-              <div className="flex flex-col items-start">
-                <LinkedInButton />
-                <ContactButton />
-                <DownloadCVButton onClick={() => setCvOpen(true)} />
-              </div>
+              <ButtonColumn
+                onContact={  () => setPage('contact')}
+                onCvOpen={   () => setCvOpen(true)}
+                onProjects={ () => setPage('projects')}
+              />
             </div>
           </>
         )}
 
-        {/* ── Mobile layout ── */}
+        {/* ── Mobile ── */}
         {isMobile && (
           <>
-            {/* Model — always mounted so it loads in background */}
             <div className="absolute inset-0">
               <InteractiveBody showHint={false} />
             </div>
 
-            {/* Intro overlay */}
             <AnimatePresence>
               {!modelRevealed && (
                 <motion.div
@@ -249,12 +293,7 @@ export default function App() {
                     className="text-lg text-gray-400 font-light h-7 mb-2"
                   >
                     <TypeAnimation
-                      sequence={[
-                        'Software Engineer', 2000,
-                        'Tech Enthusiast',   2000,
-                        'Problem Solver',    2000,
-                        'Developer',         2000,
-                      ]}
+                      sequence={['Software Engineer', 2000, 'Tech Enthusiast', 2000, 'Problem Solver', 2000, 'Developer', 2000]}
                       wrapper="span"
                       speed={50}
                       repeat={Infinity}
@@ -265,27 +304,30 @@ export default function App() {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.7 }}
-                    className="mt-3 mb-1 inline-flex items-center gap-2"
+                    className="mt-3 mb-1 inline-flex items-center gap-2.5 border border-[#00ffcc]/35 px-4 py-2 rounded-sm bg-[#00ffcc]/5"
                   >
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ffcc] opacity-60" />
+                    <span className="relative flex h-2 w-2 shrink-0">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ffcc] opacity-75" />
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00ffcc]" />
                     </span>
-                    <span className="font-mono text-[10px] tracking-[0.25em] text-[#00ffcc]/55 uppercase">
-                      Available for freelance
+                    <span className="font-mono text-[10px] tracking-[0.2em] text-[#00ffcc]/80 uppercase">
+                      Open to freelance work
                     </span>
                   </motion.div>
 
-                  <LinkedInButton />
-                  <ContactButton />
-                  <DownloadCVButton onClick={() => setCvOpen(true)} />
+                  <div className="flex flex-col items-center mt-1">
+                    <ContactButton   onClick={() => setPage('contact')}  />
+                    <LinkedInButton />
+                    <DownloadCVButton onClick={() => setCvOpen(true)}    />
+                    <ProjectsButton  onClick={() => setPage('projects')} />
+                  </div>
 
                   <motion.button
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.1 }}
+                    transition={{ delay: 1.5 }}
                     onClick={() => setRevealed(true)}
-                    className="mt-14 flex flex-col items-center gap-2 group"
+                    className="mt-10 flex flex-col items-center gap-2 group"
                   >
                     <span className="text-[11px] font-mono tracking-[0.3em] text-[#00ffcc]/50 uppercase group-hover:text-[#00ffcc] transition-colors">
                       Tap to explore
@@ -306,7 +348,6 @@ export default function App() {
               )}
             </AnimatePresence>
 
-            {/* Go back button — visible once model is revealed */}
             <AnimatePresence>
               {modelRevealed && (
                 <motion.button
