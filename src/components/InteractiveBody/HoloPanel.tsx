@@ -124,7 +124,7 @@ function PanelContent({ zone }: { zone: Zone }) {
       <div className="text-[10px] font-mono text-[#00ffcc]/40 uppercase tracking-widest mb-4">Operation Log</div>
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
         className="text-[15px] font-mono text-white font-semibold mb-0.5">
-        Deloitte Portugal
+        Deloitte Risk Advisory, S.A
       </motion.div>
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }}
         className="text-[12px] font-mono text-[#00ffcc] mb-3">
