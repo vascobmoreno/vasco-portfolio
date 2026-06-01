@@ -155,8 +155,8 @@ function CVModal({ onClose }: { onClose: () => void }) {
 function ButtonColumn({ onContact, onCvOpen, onProjects }: { onContact: () => void; onCvOpen: () => void; onProjects: () => void }) {
   return (
     <div className="flex flex-col items-start">
-      <ContactButton   onClick={onContact}  />
       <ProjectsButton  onClick={onProjects} />
+      <ContactButton   onClick={onContact}  />
       <LinkedInButton />
       <DownloadCVButton onClick={onCvOpen}  />
     </div>
@@ -316,8 +316,8 @@ export default function App() {
                   </motion.div>
 
                   <div className="flex flex-col items-center mt-1">
-                    <ContactButton   onClick={() => setPage('contact')}  />
                     <ProjectsButton  onClick={() => setPage('projects')} />
+                    <ContactButton   onClick={() => setPage('contact')}  />
                     <LinkedInButton />
                     <DownloadCVButton onClick={() => setCvOpen(true)}    />
                   </div>
