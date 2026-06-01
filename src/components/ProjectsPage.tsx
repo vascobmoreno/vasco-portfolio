@@ -84,7 +84,7 @@ const PROJECTS: Project[] = [
     tech:        ['HTML', 'CSS', 'JavaScript'],
     github:      '',
     live:        'https://www.trevi.pt/testev2/',
-    year:        '2024',
+    year:        '2026',
     status:      'ongoing',
     detail: {
       logo: '/logo_trevi.png',
@@ -105,11 +105,12 @@ const PROJECTS: Project[] = [
     title:       'Portfolio',
     description: 'Personal developer portfolio with an interactive 3D body model and a dark, terminal-inspired aesthetic.',
     tech:        ['React', 'TypeScript', 'Three.js', 'Tailwind CSS', 'Framer Motion', 'Vite', 'Vercel'],
-    github:      '',
+    github:      'https://github.com/vascobmoreno/vasco-portfolio',
     live:        '',
-    year:        '2025',
+    year:        '2026',
     status:      'ongoing',
     detail: {
+      logo: '/favicon.svg',
       longDescription:
         'A personal developer portfolio built with React and TypeScript. Features an interactive 3D body model with clickable zones, a dark holographic aesthetic, and a minimal state-based router — no dependencies beyond what the UI actually needs.',
       whatItDoes: [
