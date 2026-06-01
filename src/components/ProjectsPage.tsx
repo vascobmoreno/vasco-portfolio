@@ -85,7 +85,7 @@ const PROJECTS: Project[] = [
     github:      '',
     live:        'https://www.trevi.pt/testev2/',
     year:        '2024',
-    status:      'completed',
+    status:      'ongoing',
     detail: {
       logo: '/logo_trevi.png',
       longDescription:
@@ -99,6 +99,32 @@ const PROJECTS: Project[] = [
         'Available in four languages — Portuguese, Spanish, English, and French.',
       ],
       website: 'https://www.trevi.pt/testev2/',
+    },
+  },
+  {
+    title:       'Portfolio',
+    description: 'Personal developer portfolio with an interactive 3D body model and a dark, terminal-inspired aesthetic.',
+    tech:        ['React', 'TypeScript', 'Three.js', 'Tailwind CSS', 'Framer Motion', 'Vite', 'Vercel'],
+    github:      '',
+    live:        '',
+    year:        '2025',
+    status:      'ongoing',
+    detail: {
+      longDescription:
+        'A personal developer portfolio built with React and TypeScript. Features an interactive 3D body model with clickable zones, a dark holographic aesthetic, and a minimal state-based router — no dependencies beyond what the UI actually needs.',
+      whatItDoes: [
+        'Interactive 3D body model built with Three.js and React Three Fiber — click any highlighted zone to trigger context-specific interactions.',
+        'Dark holographic UI theme with CSS scanline effects, zone pulse rings, and teal accent glows throughout.',
+        'Projects section with per-project detail views, hover curtain reveal on cards, and structured content (what it does, how it works, what makes it interesting).',
+        'Contact form with country code selector, powered by Web3Forms for server-side email delivery with no backend required.',
+        'Zero-dependency routing via a three-state React machine — no react-router, no overhead.',
+        'Smooth page transitions using Framer Motion AnimatePresence on every view change.',
+      ],
+      whatMakesItInteresting: [
+        'The 3D model uses a custom GLSL ShaderMaterial for zone boundary glows — all rendering happens on the GPU.',
+        'The glitch animation on "Moreno" layers two CSS clip-path keyframe sequences (24 and 34 frames) with a time-offset visibility cycle, so it fires pseudo-randomly.',
+        'The entire app is driven by a three-value state machine (home / projects / contact) — no routing library, no URL changes, no history stack.',
+      ],
     },
   },
   {
