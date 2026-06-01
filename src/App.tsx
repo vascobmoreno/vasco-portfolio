@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import Navbar from './components/Navbar';
 import InteractiveBody from './components/InteractiveBody';
-import Intro from './components/Intro';
 
 function LinkedInButton() {
   return (
@@ -120,7 +119,6 @@ function CVModal({ onClose }: { onClose: () => void }) {
 }
 
 export default function App() {
-  const [unlocked, setUnlocked]      = useState(false);
   const [isMobile, setIsMobile]      = useState(false);
   const [modelRevealed, setRevealed] = useState(false);
   const [cvOpen, setCvOpen]          = useState(false);
@@ -131,8 +129,6 @@ export default function App() {
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);
-
-  if (!unlocked) return <Intro onUnlock={() => setUnlocked(true)} />;
 
   return (
     <div className="h-screen overflow-hidden bg-dark flex flex-col">
@@ -184,6 +180,21 @@ export default function App() {
                   speed={50}
                   repeat={Infinity}
                 />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: -24 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.8 }}
+                className="mt-4 inline-flex items-center gap-2"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ffcc] opacity-60" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00ffcc]" />
+                </span>
+                <span className="font-mono text-[10px] tracking-[0.25em] text-[#00ffcc]/55 uppercase">
+                  Available for freelance
+                </span>
               </motion.div>
 
               <div className="flex flex-col items-start">
@@ -248,6 +259,21 @@ export default function App() {
                       speed={50}
                       repeat={Infinity}
                     />
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7 }}
+                    className="mt-3 mb-1 inline-flex items-center gap-2"
+                  >
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ffcc] opacity-60" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00ffcc]" />
+                    </span>
+                    <span className="font-mono text-[10px] tracking-[0.25em] text-[#00ffcc]/55 uppercase">
+                      Available for freelance
+                    </span>
                   </motion.div>
 
                   <LinkedInButton />
