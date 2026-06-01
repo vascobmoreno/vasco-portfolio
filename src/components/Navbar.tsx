@@ -18,9 +18,9 @@ export default function Navbar({ onNavigate }: Props) {
       <div className="px-5 flex items-center h-16">
         <button
           onClick={() => onNavigate?.('home')}
-          className="font-mono text-xs tracking-[0.3em] text-[#00ffcc]/40 hover:text-[#00ffcc]/80 transition-colors uppercase"
+          className="opacity-60 hover:opacity-100 transition-opacity"
         >
-          VM
+          <img src="/favicon.svg" alt="logo" className="w-7 h-7" />
         </button>
       </div>
     </motion.nav>
