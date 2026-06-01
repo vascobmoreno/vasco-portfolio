@@ -33,24 +33,52 @@ const BackButton = ({ onClick }: { onClick: () => void }) => (
   </button>
 );
 
+const COUNTRY_CODES = [
+  { code: '+351', label: '🇵🇹 +351' },
+  { code: '+1',   label: '🇺🇸 +1'   },
+  { code: '+44',  label: '🇬🇧 +44'  },
+  { code: '+34',  label: '🇪🇸 +34'  },
+  { code: '+33',  label: '🇫🇷 +33'  },
+  { code: '+49',  label: '🇩🇪 +49'  },
+  { code: '+39',  label: '🇮🇹 +39'  },
+  { code: '+31',  label: '🇳🇱 +31'  },
+  { code: '+32',  label: '🇧🇪 +32'  },
+  { code: '+41',  label: '🇨🇭 +41'  },
+  { code: '+46',  label: '🇸🇪 +46'  },
+  { code: '+47',  label: '🇳🇴 +47'  },
+  { code: '+45',  label: '🇩🇰 +45'  },
+  { code: '+358', label: '🇫🇮 +358' },
+  { code: '+48',  label: '🇵🇱 +48'  },
+  { code: '+55',  label: '🇧🇷 +55'  },
+  { code: '+52',  label: '🇲🇽 +52'  },
+  { code: '+54',  label: '🇦🇷 +54'  },
+  { code: '+91',  label: '🇮🇳 +91'  },
+  { code: '+86',  label: '🇨🇳 +86'  },
+  { code: '+81',  label: '🇯🇵 +81'  },
+  { code: '+82',  label: '🇰🇷 +82'  },
+  { code: '+61',  label: '🇦🇺 +61'  },
+  { code: '+64',  label: '🇳🇿 +64'  },
+  { code: '+27',  label: '🇿🇦 +27'  },
+  { code: '+971', label: '🇦🇪 +971' },
+];
+
 export default function ContactPage({ onBack }: { onBack: () => void }) {
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
+    name: "", email: "", subject: "", message: "",
+    countryCode: "+351", phone: "",
   });
   const [status, setStatus] = useState<Status>("idle");
 
   const set =
     (f: keyof typeof form) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
       setForm((prev) => ({ ...prev, [f]: e.target.value }));
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (status === "sending") return;
     setStatus("sending");
+    const phone = form.phone ? `${form.countryCode} ${form.phone}` : '';
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
@@ -60,6 +88,7 @@ export default function ContactPage({ onBack }: { onBack: () => void }) {
           subject: form.subject || `Portfolio contact from ${form.name}`,
           from_name: form.name,
           email: form.email,
+          phone: phone || 'Not provided',
           message: form.message,
         }),
       });
@@ -125,7 +154,7 @@ export default function ContactPage({ onBack }: { onBack: () => void }) {
               </div>
               <button
                 onClick={() => {
-                  setForm({ name: "", email: "", subject: "", message: "" });
+                  setForm({ name: "", email: "", subject: "", message: "", countryCode: "+351", phone: "" });
                   setStatus("idle");
                 }}
                 className="font-mono text-[10px] tracking-[0.3em] text-[#00ffcc]/40 hover:text-[#00ffcc]/80 transition-colors uppercase mt-2"
@@ -163,6 +192,33 @@ export default function ContactPage({ onBack }: { onBack: () => void }) {
                     onChange={set("email")}
                     className={inputClass}
                     placeholder="you@example.com"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="font-mono text-[9px] tracking-[0.4em] text-[#00ffcc]/40 uppercase">
+                  Phone (Optional)
+                </label>
+                <div className="flex gap-2">
+                  <select
+                    value={form.countryCode}
+                    onChange={set("countryCode")}
+                    className="bg-transparent border-b border-[#00ffcc]/20 pb-2 font-mono text-sm text-white outline-none focus:border-[#00ffcc]/50 transition-colors shrink-0 appearance-none cursor-pointer"
+                    style={{ width: '6.5rem' }}
+                  >
+                    {COUNTRY_CODES.map(c => (
+                      <option key={c.code} value={c.code} className="bg-[#0a0a0f]">
+                        {c.label}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="tel"
+                    value={form.phone}
+                    onChange={set("phone")}
+                    className={inputClass}
+                    placeholder="Your phone number"
                   />
                 </div>
               </div>

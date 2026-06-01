@@ -7,23 +7,22 @@ interface Project {
   github?:     string;
   live?:       string;
   year:        string;
-  status:      'completed' | 'in progress' | 'archived';
+  status:      'completed' | 'in progress' | 'ongoing' | 'archived';
 }
 
-// ── Update these with your real projects ──────────────────────────
 const PROJECTS: Project[] = [
   {
-    title:       'Project Title',
-    description: 'Short description of what the project does and the problem it solves. Replace this with your own.',
-    tech:        ['React', 'TypeScript', 'Node.js'],
+    title:       'The Tips Lobby',
+    description: 'A social platform where football and basketball fans make match predictions, compete in private lobbies with friends, and track their pick accuracy over time.',
+    tech:        ['Next.js', 'Supabase', 'Tailwind CSS', 'Vercel'],
     github:      '',
     live:        '',
-    year:        '2025',
-    status:      'completed',
+    year:        '2026',
+    status:      'ongoing',
   },
   {
     title:       'Project Title',
-    description: 'Short description of what the project does and the problem it solves. Replace this with your own.',
+    description: 'Short description of what the project does and the problem it solves.',
     tech:        ['ServiceNow', 'JavaScript', 'REST API'],
     github:      '',
     live:        '',
@@ -32,26 +31,18 @@ const PROJECTS: Project[] = [
   },
   {
     title:       'Project Title',
-    description: 'Short description of what the project does and the problem it solves. Replace this with your own.',
+    description: 'Short description of what the project does and the problem it solves.',
     tech:        ['Java', 'Spring Boot', 'PostgreSQL'],
     github:      '',
     live:        '',
     year:        '2024',
     status:      'completed',
   },
-  {
-    title:       'Project Title',
-    description: 'Short description of what the project does and the problem it solves. Replace this with your own.',
-    tech:        ['Python', 'FastAPI', 'Docker'],
-    github:      '',
-    live:        '',
-    year:        '2023',
-    status:      'archived',
-  },
 ];
 
 const STATUS_COLORS = {
   'completed':   'text-[#00ffcc]/70 border-[#00ffcc]/30',
+  'ongoing':     'text-yellow-400/80 border-yellow-400/35',
   'in progress': 'text-yellow-400/70 border-yellow-400/30',
   'archived':    'text-gray-500 border-gray-600/30',
 };
