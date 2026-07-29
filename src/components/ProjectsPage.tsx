@@ -26,6 +26,35 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
+    title:       "L'Avenue",
+    description: 'Marketing/brand site for a Portuguese electronic-music and nightlife event brand — events, ticketing, and newsletter capture.',
+    tech:        ['HTML', 'CSS', 'JavaScript', 'Vercel', 'Klaviyo', 'GA4'],
+    github:      '',
+    live:        'https://lavenuexperience.com',
+    year:        '2026',
+    status:      'ongoing',
+    detail: {
+      logo: '/lavenue_logo.png',
+      longDescription:
+        "A marketing/brand site for L'Avenue, a real Portuguese electronic-music and nightlife event brand. Built deliberately minimal — plain HTML, CSS, and vanilla JavaScript, no framework, no build tool, no npm dependencies. Every page is a static .html file sharing styles.css and script.js, kept simple to host, fast to load, and easy to hand-edit.",
+      whatItDoes: [
+        'Homepage with hero, about, upcoming experiences, gallery, and partners/sponsors sections',
+        'Dedicated event pages for the live ticketed event, the next upcoming event, and a "Past Experiences" archive',
+        'A custom email-capture modal wired directly to Klaviyo\'s client-side API for real newsletter list growth',
+        '"Get Directions" dropdown per event linking out to Waze, Google Maps, and Apple Maps',
+        'Hosted on Vercel with Git-connected auto-deploys, vercel.json rewrites for clean URLs, and a custom domain (lavenuexperience.com)',
+        'Google Analytics 4 tracks page views and a custom buy_tickets_click event; Vercel Web Analytics and Speed Insights also installed',
+      ],
+      whatMakesItInteresting: [
+        'A signature "fan" logo animation — a CSS conic-gradient used as a mask, driven by requestAnimationFrame, that opens and closes like a hand fan',
+        'Hero background video has dimming baked in via ffmpeg instead of applied at runtime with CSS opacity, for better mobile performance',
+        'Horizontal-scroll DJ/gallery flip-cards reveal front/back images, with hover on desktop and scroll-position-driven interaction on mobile',
+        'Real event photography and video processed with PIL and ffmpeg for web-appropriate sizing and compression',
+      ],
+      website: 'https://lavenuexperience.com',
+    },
+  },
+  {
     title:       'The Tips Lobby',
     description: 'Social pick-tracking platform for football and basketball fans.',
     tech:        ['Next.js', 'Supabase', 'Tailwind CSS', 'Vercel'],
