@@ -28,7 +28,7 @@ const PROJECTS: Project[] = [
   {
     title:       "L'Avenue",
     description: 'Marketing/brand site for a Portuguese electronic-music and nightlife event brand — events, ticketing, and newsletter capture.',
-    tech:        ['HTML', 'CSS', 'JavaScript', 'Vercel', 'Klaviyo', 'GA4'],
+    tech:        ['HTML', 'CSS', 'JavaScript', 'Vercel'],
     github:      '',
     live:        'https://lavenuexperience.com',
     year:        '2026',
@@ -36,14 +36,13 @@ const PROJECTS: Project[] = [
     detail: {
       logo: '/lavenue_logo.png',
       longDescription:
-        "A marketing/brand site for L'Avenue, a real Portuguese electronic-music and nightlife event brand. Built deliberately minimal — plain HTML, CSS, and vanilla JavaScript, no framework, no build tool, no npm dependencies. Every page is a static .html file sharing styles.css and script.js, kept simple to host, fast to load, and easy to hand-edit.",
+        "A marketing/brand site for L'Avenue, a Portuguese electronic music event brand. Built deliberately minimal — plain HTML, CSS, and vanilla JavaScript, no framework, no build tool, no npm dependencies. Every page is a static .html file sharing styles.css and script.js, kept simple to host, fast to load, and easy to hand-edit.",
       whatItDoes: [
         'Homepage with hero, about, upcoming experiences, gallery, and partners/sponsors sections',
         'Dedicated event pages for the live ticketed event, the next upcoming event, and a "Past Experiences" archive',
-        'A custom email-capture modal wired directly to Klaviyo\'s client-side API for real newsletter list growth',
+        'Links out to the ticketing platform so visitors can buy tickets for each event directly from the site',
         '"Get Directions" dropdown per event linking out to Waze, Google Maps, and Apple Maps',
         'Hosted on Vercel with Git-connected auto-deploys, vercel.json rewrites for clean URLs, and a custom domain (lavenuexperience.com)',
-        'Google Analytics 4 tracks page views and a custom buy_tickets_click event; Vercel Web Analytics and Speed Insights also installed',
       ],
       whatMakesItInteresting: [
         'A signature "fan" logo animation — a CSS conic-gradient used as a mask, driven by requestAnimationFrame, that opens and closes like a hand fan',
