@@ -13,7 +13,7 @@ interface Project {
   github?:     string;
   live?:       string;
   year:        string;
-  status:      'completed' | 'in progress' | 'ongoing' | 'archived';
+  status:      'completed' | 'in progress' | 'ongoing' | 'archived' | 'discontinued';
   detail?: {
     logo?:                   string;
     longDescription:         string;
@@ -51,59 +51,6 @@ const PROJECTS: Project[] = [
         'Real event photography and video processed with PIL and ffmpeg for web-appropriate sizing and compression',
       ],
       website: 'https://lavenuexperience.com',
-    },
-  },
-  {
-    title:       'The Tips Lobby',
-    description: 'Social pick-tracking platform for football and basketball fans.',
-    tech:        ['Next.js', 'Supabase', 'Tailwind CSS', 'Vercel'],
-    github:      '',
-    live:        'https://the-tips-lobby.vercel.app/',
-    year:        '2026',
-    status:      'ongoing',
-    detail: {
-      logo: '/the_tips_lobby_logo.png',
-      longDescription:
-        'A full-stack web app where users create private lobbies, invite friends, and compare sports predictions before kick-off — no real money involved, just bragging rights.',
-      whatItDoes: [
-        'Make picks on upcoming matches across 14 competitions (Champions League, Premier League, La Liga, Bundesliga, Serie A, NBA, and more)',
-        'Create private lobbies with invite codes and compete on a leaderboard with friends',
-        'See live community pick splits — before the game starts, you can see what percentage of all users backed each outcome',
-        'Track your personal record: total picks made, how many were resolved, and your correct pick rate',
-        'Match data updates automatically every day with live scores and results',
-      ],
-      whatMakesItInteresting: [
-        'Every pick feeds into a global stats engine — so even without a lobby, you can browse any match and instantly see how the crowd is leaning',
-        'After results come in, picks are automatically resolved and each user\'s accuracy stats update in real time',
-        'All community percentages are aggregated anonymously — no individual data is ever exposed',
-      ],
-      howItWorks: [
-        {
-          title: 'Browse matches',
-          description: 'Open the app and see all upcoming football and basketball matches for today and tomorrow — organised by league, with kick-off times.',
-        },
-        {
-          title: 'Make your picks',
-          description: 'For each match, choose your predictions: who wins, whether both teams score, how many goals, and more. Picks lock at kick-off.',
-        },
-        {
-          title: 'See the community split',
-          description: 'Instantly see what percentage of all users picked each outcome — before the game starts. Is the crowd backing the favourite, or is there a surprise upset coming?',
-        },
-        {
-          title: 'Create or join a lobby',
-          description: 'Create a private lobby and share the invite code with friends, a group chat, or your community. Everyone\'s picks are tracked in the same place.',
-        },
-        {
-          title: 'Compete on the leaderboard',
-          description: 'Once results come in, picks are automatically resolved. The lobby leaderboard updates in real time — see who called it right and who got it wrong.',
-        },
-        {
-          title: 'Track your stats',
-          description: 'Your profile tracks everything: total picks made, how many were resolved, and your overall accuracy rate. Improve your record week after week.',
-        },
-      ],
-      website: 'https://the-tips-lobby.vercel.app/',
     },
   },
   {
@@ -156,6 +103,85 @@ const PROJECTS: Project[] = [
       ],
     },
   },
+  {
+    title:       'FPL League Tracker',
+    description: 'Full analytics view over a Fantasy Premier League mini-league — season table, most-owned players grid, and a hand-built SVG position-by-gameweek chart.',
+    tech:        ['Next.js 16', 'React 19', 'React Server Components', 'TypeScript', 'Tailwind CSS v4', 'Vercel'],
+    github:      '',
+    live:        'https://fpl-seven-omega.vercel.app/',
+    year:        '2026',
+    status:      'ongoing',
+    detail: {
+      longDescription:
+        "FPL League Tracker takes a single mini-league ID and builds a full analytics view on top of Fantasy Premier League's undocumented public API. It fetches and cross-references every manager's season history, gameweek-by-gameweek squad picks, and live player scoring, then renders three views: a sortable season table, a \"most-owned players\" grid, and a hand-built SVG chart of league position by gameweek. Built on the Next.js App Router with React Server Components — all fetching and aggregation happens server-side.",
+      whatItDoes: [
+        'Season standings — cumulative points (net of transfer-hit costs), per-manager form sparkline, chips-used badges, transfer counts/hits, and a "best friend" stat identifying each manager\'s single highest-scoring player across the whole season. Sortable columns with tie-aware competition ranking.',
+        'Players view — aggregates every squad in the league into a most-common-players grid: ownership count and %, captaincy count, price, position, club, and player photos. Optional per-league eligibility rules flag banned players and surface an eligible-count badge + violation banner.',
+        'Position graph — interactive SVG chart of league rank by gameweek with a gameweek scrubber, hover/click-to-pin highlighting, and a per-gameweek standings readout showing rank movement.',
+      ],
+      whatMakesItInteresting: [
+        'Resilient data layer over an undocumented API — custom fetch client with browser-header spoofing (FPL blocks non-browser clients), multi-page league pagination (up to 500 managers), and graceful degradation (private squads are skipped rather than fatal; falls back to the "new entries" endpoint before the season locks).',
+        'Tiered caching — 30s revalidation for live/mutable data, 7-day caching for finished gameweeks that can never change; near-live without flooding the upstream API.',
+        'Concurrency-limited batch fetching — one league view can mean hundreds of API calls (history + every gameweek\'s picks + live scoring per manager), run in fixed-size batches.',
+        'Pure aggregation core — season rollups, ownership aggregation, timeline reconstruction, and ranking are all I/O-free functions, separate from fetching and rendering.',
+        'Hand-rolled SVG visualisations — sparklines and the interactive position chart built directly in SVG, no charting dependency.',
+      ],
+      website: 'https://fpl-seven-omega.vercel.app/',
+    },
+  },
+  {
+    title:       'The Tips Lobby',
+    description: 'Social pick-tracking platform for football and basketball fans.',
+    tech:        ['Next.js', 'Supabase', 'Tailwind CSS', 'Vercel'],
+    github:      '',
+    live:        'https://the-tips-lobby.vercel.app/',
+    year:        '2026',
+    status:      'discontinued',
+    detail: {
+      logo: '/the_tips_lobby_logo.png',
+      longDescription:
+        'A full-stack web app where users create private lobbies, invite friends, and compare sports predictions before kick-off — no real money involved, just bragging rights.',
+      whatItDoes: [
+        'Make picks on upcoming matches across 14 competitions (Champions League, Premier League, La Liga, Bundesliga, Serie A, NBA, and more)',
+        'Create private lobbies with invite codes and compete on a leaderboard with friends',
+        'See live community pick splits — before the game starts, you can see what percentage of all users backed each outcome',
+        'Track your personal record: total picks made, how many were resolved, and your correct pick rate',
+        'Match data updates automatically every day with live scores and results',
+      ],
+      whatMakesItInteresting: [
+        'Every pick feeds into a global stats engine — so even without a lobby, you can browse any match and instantly see how the crowd is leaning',
+        'After results come in, picks are automatically resolved and each user\'s accuracy stats update in real time',
+        'All community percentages are aggregated anonymously — no individual data is ever exposed',
+      ],
+      howItWorks: [
+        {
+          title: 'Browse matches',
+          description: 'Open the app and see all upcoming football and basketball matches for today and tomorrow — organised by league, with kick-off times.',
+        },
+        {
+          title: 'Make your picks',
+          description: 'For each match, choose your predictions: who wins, whether both teams score, how many goals, and more. Picks lock at kick-off.',
+        },
+        {
+          title: 'See the community split',
+          description: 'Instantly see what percentage of all users picked each outcome — before the game starts. Is the crowd backing the favourite, or is there a surprise upset coming?',
+        },
+        {
+          title: 'Create or join a lobby',
+          description: 'Create a private lobby and share the invite code with friends, a group chat, or your community. Everyone\'s picks are tracked in the same place.',
+        },
+        {
+          title: 'Compete on the leaderboard',
+          description: 'Once results come in, picks are automatically resolved. The lobby leaderboard updates in real time — see who called it right and who got it wrong.',
+        },
+        {
+          title: 'Track your stats',
+          description: 'Your profile tracks everything: total picks made, how many were resolved, and your overall accuracy rate. Improve your record week after week.',
+        },
+      ],
+      website: 'https://the-tips-lobby.vercel.app/',
+    },
+  },
 ];
 
 const STATUS_COLORS = {
@@ -163,6 +189,7 @@ const STATUS_COLORS = {
   'ongoing':     'text-yellow-400/80 border-yellow-400/35',
   'in progress': 'text-yellow-400/70 border-yellow-400/30',
   'archived':    'text-gray-500 border-gray-600/30',
+  'discontinued': 'text-red-400/80 border-red-400/35 bg-red-500/5',
 };
 
 function BackArrow() {
