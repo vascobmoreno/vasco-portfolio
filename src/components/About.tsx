@@ -38,7 +38,7 @@ export default function About() {
             technology can achieve.
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
-            {['Fafe, Braga', 'vascobmoreno@gmail.com', '+351 912971296'].map((item) => (
+            {['Fafe, Braga', 'vascobmoreno@gmail.com'].map((item) => (
               <span key={item} className="font-mono text-xs text-primary/80 bg-primary/5 border border-primary/20 px-3 py-1.5 rounded-full">
                 {item}
               </span>
