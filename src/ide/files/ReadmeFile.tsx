@@ -26,7 +26,6 @@ export default function ReadmeFile() {
       <L>{k('## ')}{w('Contact')}</L>
       <L />
       <L indent="i1">{g('- ')}{p('Email')}{d('    ')} {s('vascobmoreno@gmail.com')}</L>
-      <L indent="i1">{g('- ')}{p('Phone')}{d('    ')} {s('+351 912 971 296')}</L>
       <L indent="i1">{g('- ')}{p('Location')} {s('Fafe, Braga, Portugal')}</L>
       <L />
       <L>{g('---')}</L>

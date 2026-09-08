@@ -15,7 +15,6 @@ export default function ContactFile() {
       <L />
       <L>{kw('const ')} {pr('contact ')} {pu('= {')}</L>
       <L indent="i1">{pr('email')}{pu(':        ')}{st('vascobmoreno@gmail.com')}{pu(',')}</L>
-      <L indent="i1">{pr('phone')}{pu(':        ')}{st('+351 912 971 296')}{pu(',')}</L>
       <L indent="i1">{pr('location')}{pu(':     ')}{st('Fafe, Braga, Portugal')}{pu(',')}</L>
       <L indent="i1">{pr('availability')}{pu(': ')}{st('Open to new opportunities')}{pu(',')}</L>
       <L>{pu('} ')} {kw('as const')}{pu(';')}</L>

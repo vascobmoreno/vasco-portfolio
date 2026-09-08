@@ -103,7 +103,6 @@ function PanelContent({ zone }: { zone: Zone }) {
       <Divider />
       {[
         { label: 'Email', value: 'vascobmoreno@gmail.com', href: 'mailto:vascobmoreno@gmail.com' },
-        { label: 'Phone', value: '+351 912 971 296',       href: 'tel:+351912971296' },
       ].map(({ label, value, href }, i) => (
         <motion.div key={label} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.62 + 0.06 * i }}
           className="mb-3">
@@ -180,7 +179,6 @@ function PanelContent({ zone }: { zone: Zone }) {
       <div className="text-[10px] font-mono text-[#00ffcc]/40 uppercase tracking-widest mb-4">Establish Uplink</div>
       {[
         { label: 'Email', value: 'vascobmoreno@gmail.com', href: 'mailto:vascobmoreno@gmail.com' },
-        { label: 'Phone', value: '+351 912 971 296', href: 'tel:+351912971296' },
         { label: 'Location', value: 'Fafe, Braga, Portugal', href: undefined },
       ].map(({ label, value, href }, i) => (
         <motion.div key={label} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.07 * i }}
